@@ -1,21 +1,21 @@
 import React, { useState, useRef } from "react";
-import { X, UploadCloud, Calendar } from "lucide-react";
+import { X, UploadCloud } from "lucide-react";
 import { useBrandColors } from "../../../contexts/BrandColorContext";
 
 const countries = ["USA", "India", "UK", "Germany", "France", "Australia"];
 const productTypes = ["Simple", "Variable", "Bundled"];
 const categories = ["Shoes", "Clothing", "Accessories"];
 const brands = ["Nike", "Adidas", "Puma", "Reebok"];
-const genders = ["Male", "Female", "Unisex"];
-const sizes = [
-  "EU - 38.5",
-  "EU - 39",
-  "EU - 40",
-  "EU - 41.5",
-  "EU - 42",
-  "EU - 43",
-  "EU - 44",
-];
+// const genders = ["Male", "Female", "Unisex"];
+// const sizes = [
+//   "EU - 38.5",
+//   "EU - 39",
+//   "EU - 40",
+//   "EU - 41.5",
+//   "EU - 42",
+//   "EU - 43",
+//   "EU - 44",
+// ];
 const currencies = ["USD", "INR", "EUR", "GBP", "AFN"];
 const stockStatuses = ["In stock", "Out of stock", "Backorder"];
 const yesNo = ["Yes", "No"];
