@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { useSettings } from "./SettingsContext";
 
 export type BrandColors = {
   primary: string;
@@ -28,6 +29,20 @@ export const useBrandColors = () => useContext(BrandColorContext);
 
 export const BrandColorProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [colors, setColors] = useState<BrandColors>(defaultColors);
+  const { settings } = useSettings();
+
+  useEffect(() => {
+    // If settings has paletteName and color values, update context
+    if (settings && (settings.paletteName || settings.primary)) {
+      setColors({
+        primary: settings.primary || defaultColors.primary,
+        secondary: settings.secondary || defaultColors.secondary,
+        accent: settings.accent || defaultColors.accent,
+        background: settings.background || defaultColors.background,
+        text: settings.text || defaultColors.text,
+      });
+    }
+  }, [settings.paletteName, settings.primary, settings.secondary, settings.accent, settings.background, settings.text]);
 
   return (
     <BrandColorContext.Provider value={{ colors, setColors }}>

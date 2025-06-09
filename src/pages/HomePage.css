@@ -1,0 +1,24 @@
+.auto-scroll-reviews-container {
+    overflow: hidden;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.auto-scroll-reviews-inner {
+    display: flex;
+    animation: scrollReviews linear infinite;
+    /* Calculate duration based on number of reviews and their width */
+    /* This is a placeholder, adjust as needed */
+    animation-duration: 30s;
+}
+
+@keyframes scrollReviews {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        /* Translate by the width of one set of reviews */
+        /* This assumes each review has a consistent width and gap */
+        transform: translateX(-50%);
+    }
+}

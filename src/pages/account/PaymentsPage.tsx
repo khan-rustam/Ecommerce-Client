@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { useSelector } from 'react-redux';
 import { Profile } from '../../api';
 import { useBrandColors } from '../../contexts/BrandColorContext';
+import AccountLayout from '../../components/layout/AccountLayout';
 
 const emptyCard = {
   type: '',
@@ -127,7 +128,7 @@ const PaymentsPage = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-8" style={{ background: colors.background, color: colors.text }}>
+    <AccountLayout>
       <h2 className="text-2xl font-bold mb-6" style={{ color: colors.primary }}>Payment Methods</h2>
       <button
         className="mb-4 px-4 py-2 rounded shadow transition font-semibold"
@@ -223,7 +224,8 @@ const PaymentsPage = () => {
           </div>
         </div>
       )}
-    </div>
+    </AccountLayout>
   );
 };
+
 export default PaymentsPage; 

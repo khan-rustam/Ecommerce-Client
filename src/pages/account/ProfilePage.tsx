@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import toast from "react-hot-toast";
-import { clearUser } from "../../store/userSlice";
+import { clearUser, setUser } from "../../store/userSlice";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { Profile } from "../../api";
 import { useBrandColors } from "../../contexts/BrandColorContext";
+import AccountLayout from "../../components/layout/AccountLayout";
 
 const ProfilePage = () => {
   const token = useSelector((state: any) => state.user.token);
@@ -30,7 +31,9 @@ const ProfilePage = () => {
     phone: "",
   });
   const [profileUpdating, setProfileUpdating] = useState(false);
+  const [avatarUploading, setAvatarUploading] = useState(false);
   const { colors } = useBrandColors();
+  const user = useSelector((state: any) => state.user.user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -47,9 +50,11 @@ const ProfilePage = () => {
       setEmail(data.email || "");
       setPhone(data.phoneNumber || "");
       setAvatar(
-        `https://ui-avatars.com/api/?name=${encodeURIComponent(
-          data.username || "User"
-        )}&background=orange&color=fff`
+        data.avatar && data.avatar.trim() !== ""
+          ? data.avatar
+          : `https://ui-avatars.com/api/?name=${encodeURIComponent(
+              data.username || "User"
+            )}&background=orange&color=fff`
       );
       setOriginalProfile({
         username: data.username || "",
@@ -146,6 +151,11 @@ const ProfilePage = () => {
       setPendingUpdate(null);
       setOtpBoxes(["", "", "", "", "", ""]);
       await fetchProfile(); // Refresh profile after update
+      // Update Redux user state with new avatar
+      dispatch(setUser({
+        user: { ...user, avatar: data.avatar },
+        token,
+      }));
     } catch (err: any) {
       toast.error(err.message);
     } finally {
@@ -154,151 +164,190 @@ const ProfilePage = () => {
     }
   };
 
+  // Avatar upload handler
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      toast.error('Only image files are allowed');
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error('Max file size is 2MB');
+      return;
+    }
+    setAvatarUploading(true);
+    const formData = new FormData();
+    formData.append('avatar', file);
+    try {
+      const res = await fetch('/api/auth/upload-avatar', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      } as any);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.msg || 'Upload failed');
+      setAvatar(data.avatar);
+      // Update Redux user state with new avatar
+      dispatch(setUser({
+        user: { ...user, avatar: data.avatar },
+        token,
+      }));
+      toast.success('Avatar updated!');
+    } catch (err: any) {
+      toast.error(err.message);
+    } finally {
+      setAvatarUploading(false);
+    }
+  };
+
   return (
-    <div
-      className="min-h-screen flex items-center justify-center py-8 px-2"
-      style={{ background: colors.background }}
-    >
-      <div className="w-full max-w-2xl mx-auto">
-        <div
-          className="rounded-2xl shadow-xl p-8 md:p-12 relative animate-fade-in"
-          style={{ background: colors.accent }}
+    <AccountLayout>
+      <div className="relative animate-fade-in">
+        <h2
+          className="text-2xl font-bold mb-8 tracking-tight"
+          style={{ color: colors.primary }}
         >
-          <h2
-            className="text-3xl font-bold mb-8 text-center tracking-tight"
-            style={{ color: colors.primary }}
-          >
-            Profile Settings
-          </h2>
-          {loading ? (
-            <div className="flex justify-center items-center h-40">
-              <Loader2
-                className="h-10 w-10 animate-spin"
-                style={{ color: colors.primary }}
+          Profile Settings
+        </h2>
+        {loading ? (
+          <div className="flex justify-center items-center h-40">
+            <Loader2
+              className="h-10 w-10 animate-spin"
+              style={{ color: colors.primary }}
+            />
+          </div>
+        ) : (
+          <>
+            <div className="flex flex-col md:flex-row items-center gap-6 mb-8">
+              <img
+                src={avatar}
+                alt="avatar"
+                className="w-24 h-24 rounded-full border-4 shadow-md object-cover"
+                style={{ borderColor: colors.secondary, background: "#fff" }}
               />
-            </div>
-          ) : (
-            <>
-              <div className="flex flex-col md:flex-row items-center gap-6 mb-8">
-                <img
-                  src={avatar}
-                  alt="avatar"
-                  className="w-24 h-24 rounded-full border-4 shadow-md object-cover"
-                  style={{ borderColor: colors.secondary, background: "#fff" }}
-                />
-                <div className="flex flex-col items-center md:items-start">
-                  <button
-                    className="text-sm hover:underline font-medium"
-                    style={{ color: colors.primary }}
-                    onClick={() => toast("Avatar upload not implemented")}
-                  >
-                    Change Avatar
-                  </button>
-                  <span className="text-xs mt-1" style={{ color: colors.text }}>
-                    JPG, PNG, max 2MB
-                  </span>
-                </div>
+              <div className="flex flex-col items-center md:items-start">
+                <label
+                  className="text-sm hover:underline font-medium cursor-pointer"
+                  style={{ color: colors.primary }}
+                >
+                  {avatarUploading ? 'Uploading...' : 'Change Avatar'}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleAvatarChange}
+                    disabled={avatarUploading}
+                  />
+                </label>
+                <span className="text-xs mt-1" style={{ color: colors.text }}>
+                  JPG, PNG, max 2MB
+                </span>
               </div>
-              <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-                <div>
-                  <label
-                    className="block text-sm font-semibold mb-1"
-                    style={{ color: colors.text }}
-                  >
-                    Username
-                  </label>
-                  <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 text-lg"
-                    style={{
-                      background: "#fff",
-                      color: colors.text,
-                      borderColor: colors.secondary,
-                      ...({
-                        ["--tw-ring-color"]: colors.primary,
-                      } as React.CSSProperties),
-                    }}
-                    disabled={!editing}
-                  />
-                </div>
-                <div>
-                  <label
-                    className="block text-sm font-semibold mb-1"
-                    style={{ color: colors.text }}
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 text-lg"
-                    style={{
-                      background: "#fff",
-                      color: colors.text,
-                      borderColor: colors.secondary,
-                      ...({
-                        ["--tw-ring-color"]: colors.primary,
-                      } as React.CSSProperties),
-                    }}
-                    disabled={!editing}
-                    placeholder={email ? "" : "Add email"}
-                  />
-                </div>
-                <div>
-                  <label
-                    className="block text-sm font-semibold mb-1"
-                    style={{ color: colors.text }}
-                  >
-                    Phone
-                  </label>
-                  <input
-                    type="text"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 text-lg"
-                    style={{
-                      background: "#fff",
-                      color: colors.text,
-                      borderColor: colors.secondary,
-                      ...({
-                        ["--tw-ring-color"]: colors.primary,
-                      } as React.CSSProperties),
-                    }}
-                    disabled={!editing}
-                    placeholder={phone ? "" : "Add phone number"}
-                  />
-                </div>
-                <div>
-                  <label
-                    className="block text-sm font-semibold mb-1"
-                    style={{ color: colors.text }}
-                  >
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    value={editing ? password : "********"}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 text-lg"
-                    style={{
-                      background: "#fff",
-                      color: colors.text,
-                      borderColor: colors.secondary,
-                      ...({
-                        ["--tw-ring-color"]: colors.primary,
-                      } as React.CSSProperties),
-                    }}
-                    disabled={!editing}
-                    placeholder="Enter new password"
-                  />
-                </div>
-                {editing && (
-                  <div>
+            </div>
+            
+            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+              <div className="mb-4">
+                <label
+                  className="block text-sm font-semibold mb-2"
+                  style={{ color: colors.text }}
+                >
+                  Username
+                </label>
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 text-base"
+                  style={{
+                    background: "#fff",
+                    color: colors.text,
+                    borderColor: colors.secondary,
+                    ...({
+                      ["--tw-ring-color"]: colors.primary,
+                    } as React.CSSProperties),
+                  }}
+                  disabled={!editing}
+                />
+              </div>
+              <div className="mb-4">
+                <label
+                  className="block text-sm font-semibold mb-2"
+                  style={{ color: colors.text }}
+                >
+                  Email
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 text-base"
+                  style={{
+                    background: "#fff",
+                    color: colors.text,
+                    borderColor: colors.secondary,
+                    ...({
+                      ["--tw-ring-color"]: colors.primary,
+                    } as React.CSSProperties),
+                  }}
+                  disabled={!editing}
+                  placeholder={email ? "" : "Add email"}
+                />
+              </div>
+
+              <div className="mb-4">
+                <label
+                  className="block text-sm font-semibold mb-2"
+                  style={{ color: colors.text }}
+                >
+                  Phone
+                </label>
+                <input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 text-base"
+                  style={{
+                    background: "#fff",
+                    color: colors.text,
+                    borderColor: colors.secondary,
+                    ...({
+                      ["--tw-ring-color"]: colors.primary,
+                    } as React.CSSProperties),
+                  }}
+                  disabled={!editing}
+                  placeholder={phone ? "" : "Add phone number"}
+                />
+              </div>
+
+              {editing && (
+                <>
+                  <div className="mb-4">
                     <label
-                      className="block text-sm font-semibold mb-1"
+                      className="block text-sm font-semibold mb-2"
+                      style={{ color: colors.text }}
+                    >
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 text-base"
+                      style={{
+                        background: "#fff",
+                        color: colors.text,
+                        borderColor: colors.secondary,
+                        ...({
+                          ["--tw-ring-color"]: colors.primary,
+                        } as React.CSSProperties),
+                      }}
+                      placeholder="Leave blank to keep current password"
+                    />
+                  </div>
+                  <div className="mb-4">
+                    <label
+                      className="block text-sm font-semibold mb-2"
                       style={{ color: colors.text }}
                     >
                       Confirm Password
@@ -307,7 +356,7 @@ const ProfilePage = () => {
                       type="password"
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      className="w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 text-lg"
+                      className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 text-base"
                       style={{
                         background: "#fff",
                         color: colors.text,
@@ -319,143 +368,129 @@ const ProfilePage = () => {
                       placeholder="Confirm new password"
                     />
                   </div>
+                </>
+              )}
+
+              <div className="flex flex-col md:flex-row gap-3 mt-8">
+                {editing ? (
+                  <>
+                    <button
+                      type="button"
+                      className="px-6 py-3 rounded-lg font-semibold shadow transition-colors"
+                      style={{
+                        backgroundColor: colors.primary,
+                        color: "#fff",
+                      }}
+                      onClick={handleSave}
+                    >
+                      Save
+                    </button>
+                    <button
+                      type="button"
+                      className="px-6 py-3 rounded-lg font-semibold shadow transition-colors"
+                      style={{
+                        backgroundColor: colors.secondary,
+                        color: colors.text,
+                      }}
+                      onClick={() => {
+                        setEditing(false);
+                        setPassword("");
+                      }}
+                    >
+                      Cancel
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    type="button"
+                    className="px-6 py-3 rounded-lg font-semibold shadow transition-colors"
+                    style={{
+                      backgroundColor: colors.primary,
+                      color: "#fff",
+                    }}
+                    onClick={() => setEditing(true)}
+                    disabled={editing}
+                  >
+                    Edit Profile
+                  </button>
                 )}
-                <div className="flex flex-col md:flex-row gap-3 mt-6">
-                  {editing ? (
-                    <>
-                      <button
-                        type="button"
-                        className="px-6 py-2 rounded-lg font-semibold shadow transition-colors"
-                        style={{
-                          backgroundColor: colors.primary,
-                          color: "#fff",
-                        }}
-                        onClick={handleSave}
-                      >
-                        Save
-                      </button>
-                      <button
-                        type="button"
-                        className="px-6 py-2 rounded-lg font-semibold shadow transition-colors"
-                        style={{
-                          backgroundColor: colors.secondary,
-                          color: colors.text,
-                        }}
-                        onClick={() => {
-                          setEditing(false);
-                          setPassword("");
-                        }}
-                      >
-                        Cancel
-                      </button>
-                    </>
+              </div>
+            </form>
+            
+            {showOtpModal && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
+                <div className="rounded-xl shadow-xl p-8 w-full max-w-md relative z-10" style={{ background: colors.accent || "#fff" }}>
+                  <button
+                    className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-xl"
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => {
+                      setShowOtpModal(false);
+                      setOtpBoxes(["", "", "", "", "", ""]);
+                      setOtp("");
+                    }}
+                  >
+                    &times;
+                  </button>
+                  <h3 className="text-xl font-bold mb-4 text-center" style={{ color: colors.primary }}>
+                    Verify OTP
+                  </h3>
+                  <label className="block text-sm font-medium mb-2" style={{ color: colors.text }}>
+                    Enter OTP sent to your email
+                  </label>
+                  
+                  {(otpLoading || profileUpdating) ? (
+                    <div className="flex flex-col items-center justify-center py-6">
+                      <Loader2 className="h-8 w-8 animate-spin mb-2" style={{ color: colors.primary }} />
+                      <span className="font-medium" style={{ color: colors.primary }}>
+                        {otpLoading && !profileUpdating
+                          ? "Sending OTP to your email..."
+                          : "Saving your changes..."}
+                      </span>
+                    </div>
                   ) : (
                     <>
+                      <div className="flex gap-2 justify-center mb-4">
+                        {otpBoxes.map((val, idx) => (
+                          <input
+                            key={idx}
+                            id={`profile-otp-box-${idx}`}
+                            type="text"
+                            inputMode="numeric"
+                            maxLength={1}
+                            value={val}
+                            onChange={(e) =>
+                              handleOtpBoxChange(idx, e.target.value)
+                            }
+                            className="w-10 h-12 text-center border rounded text-lg font-bold focus:ring-2 focus:border-2"
+                            style={{
+                              background: '#fff',
+                              color: colors.text,
+                              borderColor: colors.secondary,
+                              ...( { ['--tw-ring-color']: colors.primary } as React.CSSProperties )
+                            }}
+                            autoFocus={idx === 0}
+                          />
+                        ))}
+                      </div>
                       <button
-                        type="button"
-                        className="px-6 py-2 rounded-lg font-semibold shadow transition-colors"
-                        style={{
-                          backgroundColor: colors.primary,
-                          color: "#fff",
-                        }}
-                        onClick={() => setEditing(true)}
-                        disabled={editing}
+                        onClick={handleOtpConfirm}
+                        className="w-full py-3 rounded-lg font-semibold mt-4"
+                        style={{ backgroundColor: colors.primary, color: '#fff' }}
+                        disabled={otp.length !== 6}
                       >
-                        Edit Profile
-                      </button>
-                      <button
-                        type="button"
-                        className="px-6 py-2 rounded-lg font-semibold shadow transition-colors"
-                        style={{
-                          backgroundColor: colors.secondary,
-                          color: colors.text,
-                        }}
-                        onClick={() => {
-                          dispatch(clearUser());
-                          navigate("/auth/login");
-                        }}
-                      >
-                        Logout
+                        Verify & Update
                       </button>
                     </>
                   )}
                 </div>
-              </form>
-              {showOtpModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center">
-                  <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
-                  <div className="rounded-xl shadow-xl p-8 w-full max-w-md relative z-10" style={{ background: colors.accent }}>
-                    <button
-                      className="absolute top-2 right-2 text-gray-400 text-xl"
-                      style={{ cursor: 'pointer', color: colors.primary, transition: 'color 0.2s' }}
-                      onMouseOver={e => (e.currentTarget.style.color = colors.primary)}
-                      onMouseOut={e => (e.currentTarget.style.color = '')}
-                      onClick={() => {
-                        setShowOtpModal(false);
-                        setOtpBoxes(["", "", "", "", "", ""]);
-                        setOtp("");
-                      }}
-                    >
-                      &times;
-                    </button>
-                    <h3 className="text-xl font-bold mb-4 text-center" style={{ color: colors.primary }}>
-                      Verify OTP
-                    </h3>
-                    <label className="block text-sm font-medium mb-2" style={{ color: colors.text }}>
-                      Enter OTP sent to your email
-                    </label>
-                    {otpLoading || profileUpdating ? (
-                      <div className="flex flex-col items-center justify-center py-6">
-                        <Loader2 className="h-8 w-8 animate-spin mb-2" style={{ color: colors.primary }} />
-                        <span className="font-medium" style={{ color: colors.primary }}>
-                          {otpLoading && !profileUpdating
-                            ? "Sending OTP to your email..."
-                            : "Saving your changes..."}
-                        </span>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="flex gap-2 justify-center mb-4">
-                          {otpBoxes.map((val, idx) => (
-                            <input
-                              key={idx}
-                              id={`profile-otp-box-${idx}`}
-                              type="text"
-                              inputMode="numeric"
-                              maxLength={1}
-                              value={val}
-                              onChange={(e) =>
-                                handleOtpBoxChange(idx, e.target.value)
-                              }
-                              className="w-10 h-12 text-center border rounded text-lg font-bold focus:ring-2 focus:border-2"
-                              style={{
-                                background: '#fff',
-                                color: colors.text,
-                                borderColor: colors.secondary,
-                                ...( { ['--tw-ring-color']: colors.primary } as React.CSSProperties )
-                              }}
-                              autoFocus={idx === 0}
-                            />
-                          ))}
-                        </div>
-                        <button
-                          className="w-full py-2 rounded font-semibold"
-                          style={{ backgroundColor: colors.primary, color: '#fff' }}
-                          onClick={handleOtpConfirm}
-                          disabled={otpLoading || profileUpdating}
-                        >
-                          {profileUpdating ? "Saving..." : "Confirm OTP"}
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </div>
-              )}
-            </>
-          )}
-        </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
-    </div>
+    </AccountLayout>
   );
 };
+
 export default ProfilePage;

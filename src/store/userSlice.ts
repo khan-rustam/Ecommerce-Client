@@ -6,8 +6,22 @@ interface UserState {
   token: string | null;
 }
 
+// Try to parse user data safely from cookies
+const getUserFromCookie = (): any | null => {
+  try {
+    const userCookie = Cookies.get('user');
+    if (!userCookie) return null;
+    return JSON.parse(userCookie);
+  } catch (error) {
+    console.error('Error parsing user cookie:', error);
+    // If there's an error parsing, remove the corrupted cookie
+    Cookies.remove('user');
+    return null;
+  }
+};
+
 const initialState: UserState = {
-  user: Cookies.get('user') ? JSON.parse(Cookies.get('user') as string) : null,
+  user: getUserFromCookie(),
   token: Cookies.get('token') || null,
 };
 
@@ -18,14 +32,29 @@ const userSlice = createSlice({
     setUser: (state, action: PayloadAction<{ user: any; token: string }>) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
-      Cookies.set('user', JSON.stringify(action.payload.user));
-      Cookies.set('token', action.payload.token);
+      
+      try {
+        Cookies.set('user', JSON.stringify(action.payload.user), { expires: 7 });
+        Cookies.set('token', action.payload.token, { expires: 7 });
+      } catch (error) {
+        console.error('Error setting cookies:', error);
+      }
     },
     clearUser: (state) => {
       state.user = null;
       state.token = null;
-      Cookies.remove('user');
-      Cookies.remove('token');
+      
+      // Remove all authentication-related cookies
+      const cookiesToRemove = ['user', 'token', 'userToken', 'auth', 'session'];
+      
+      cookiesToRemove.forEach(cookieName => {
+        try {
+          Cookies.remove(cookieName);
+          Cookies.remove(cookieName, { path: '/' });
+        } catch (error) {
+          console.error(`Error removing ${cookieName} cookie:`, error);
+        }
+      });
     },
   },
 });

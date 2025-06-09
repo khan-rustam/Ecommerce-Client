@@ -1,67 +1,94 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { Search, SlidersHorizontal, X, Loader2 } from 'lucide-react';
 import ProductGrid from '../components/product/ProductGrid';
-import { products } from '../data/mockData';
-import { Product } from '../types';
+import { BackendProduct } from '../types';
+import ProductService from '../utils/ProductService';
 
 const SearchPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const [searchResults, setSearchResults] = useState<BackendProduct[]>([]);
+  const [loading, setLoading] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [priceRange, setPriceRange] = useState({ min: '', max: '' });
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState('relevance');
+  const [categories, setCategories] = useState<{_id: string, name: string, slug: string}[]>([]);
+  const [totalResults, setTotalResults] = useState(0);
 
   const query = searchParams.get('q') || '';
   
+  // Fetch categories for filter
   useEffect(() => {
-    let filtered = [...products];
+    const fetchCategories = async () => {
+      try {
+        const categoriesData = await ProductService.getCategories();
+        setCategories(categoriesData);
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
     
-    // Search query filter
-    if (query) {
-      filtered = filtered.filter(product => 
-        product.name.toLowerCase().includes(query.toLowerCase()) ||
-        product.description.toLowerCase().includes(query.toLowerCase())
-      );
-    }
+    fetchCategories();
+  }, []);
+
+  // Fetch search results
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      try {
+        setLoading(true);
+        
+        // Build search params
+        const params: Record<string, any> = {
+          search: query,
+          limit: 20,
+        };
+        
+        // Add price range if set
+        if (priceRange.min) {
+          params.minPrice = priceRange.min;
+        }
+        if (priceRange.max) {
+          params.maxPrice = priceRange.max;
+        }
+        
+        // Add categories if selected
+        if (selectedCategories.length > 0) {
+          params.categories = selectedCategories.join(',');
+        }
+        
+        // Add sorting
+        switch (sortBy) {
+          case 'price-low':
+            params.sort = 'price';
+            params.order = 'asc';
+            break;
+          case 'price-high':
+            params.sort = 'price';
+            params.order = 'desc';
+            break;
+          case 'rating':
+            params.sort = 'rating';
+            params.order = 'desc';
+            break;
+          default:
+            // relevance - default API sorting
+            break;
+        }
+        
+        const response = await ProductService.getProducts(params);
+        setSearchResults(response.products || []);
+        setTotalResults(response.total || 0);
+      } catch (error) {
+        console.error('Error searching products:', error);
+        setSearchResults([]);
+        setTotalResults(0);
+      } finally {
+        setLoading(false);
+      }
+    };
     
-    // Category filter
-    if (selectedCategories.length > 0) {
-      filtered = filtered.filter(product => 
-        selectedCategories.includes(product.category)
-      );
-    }
-    
-    // Price range filter
-    if (priceRange.min !== '') {
-      filtered = filtered.filter(product => 
-        (product.salePrice || product.price) >= Number(priceRange.min)
-      );
-    }
-    if (priceRange.max !== '') {
-      filtered = filtered.filter(product => 
-        (product.salePrice || product.price) <= Number(priceRange.max)
-      );
-    }
-    
-    // Sorting
-    switch (sortBy) {
-      case 'price-low':
-        filtered.sort((a, b) => (a.salePrice || a.price) - (b.salePrice || b.price));
-        break;
-      case 'price-high':
-        filtered.sort((a, b) => (b.salePrice || b.price) - (a.salePrice || a.price));
-        break;
-      case 'rating':
-        filtered.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-        break;
-      default:
-        // relevance - no additional sorting needed
-        break;
-    }
-    
-    setSearchResults(filtered);
+    fetchSearchResults();
   }, [query, selectedCategories, priceRange, sortBy]);
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
@@ -77,8 +104,6 @@ const SearchPage = () => {
     setSortBy('relevance');
   };
 
-  const uniqueCategories = Array.from(new Set(products.map(p => p.category)));
-
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Search Bar */}
@@ -89,7 +114,7 @@ const SearchPage = () => {
             name="search"
             defaultValue={query}
             placeholder="Search products..."
-            className="w-full py-3 px-4 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+            className="w-full py-3 px-4 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]"
           />
           <button
             type="submit"
@@ -108,7 +133,7 @@ const SearchPage = () => {
               <h2 className="text-lg font-semibold">Filters</h2>
               <button
                 onClick={clearFilters}
-                className="text-sm text-orange-500 hover:text-orange-600"
+                className="text-sm text-[var(--brand-primary)] hover:text-[var(--brand-primary-hover)]"
               >
                 Clear all
               </button>
@@ -118,21 +143,21 @@ const SearchPage = () => {
             <div className="mb-6">
               <h3 className="font-medium mb-3">Categories</h3>
               <div className="space-y-2">
-                {uniqueCategories.map(category => (
-                  <label key={category} className="flex items-center">
+                {categories.map(category => (
+                  <label key={category._id} className="flex items-center">
                     <input
                       type="checkbox"
-                      checked={selectedCategories.includes(category)}
+                      checked={selectedCategories.includes(category._id)}
                       onChange={(e) => {
                         if (e.target.checked) {
-                          setSelectedCategories([...selectedCategories, category]);
+                          setSelectedCategories([...selectedCategories, category._id]);
                         } else {
-                          setSelectedCategories(selectedCategories.filter(c => c !== category));
+                          setSelectedCategories(selectedCategories.filter(c => c !== category._id));
                         }
                       }}
-                      className="rounded border-gray-300 text-orange-500 focus:ring-orange-500"
+                      className="rounded border-gray-300 text-[var(--brand-primary)] focus:ring-[var(--brand-primary)]"
                     />
-                    <span className="ml-2 text-sm capitalize">{category}</span>
+                    <span className="ml-2 text-sm capitalize">{category.name}</span>
                   </label>
                 ))}
               </div>
@@ -147,14 +172,14 @@ const SearchPage = () => {
                   placeholder="Min"
                   value={priceRange.min}
                   onChange={(e) => setPriceRange({ ...priceRange, min: e.target.value })}
-                  className="w-1/2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                  className="w-1/2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[var(--brand-primary)]"
                 />
                 <input
                   type="number"
                   placeholder="Max"
                   value={priceRange.max}
                   onChange={(e) => setPriceRange({ ...priceRange, max: e.target.value })}
-                  className="w-1/2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                  className="w-1/2 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[var(--brand-primary)]"
                 />
               </div>
             </div>
@@ -165,7 +190,7 @@ const SearchPage = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-orange-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[var(--brand-primary)]"
               >
                 <option value="relevance">Relevance</option>
                 <option value="price-low">Price: Low to High</option>
@@ -180,7 +205,7 @@ const SearchPage = () => {
         <div className="lg:w-3/4">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-semibold">
-              {searchResults.length} Results {query && `for "${query}"`}
+              {loading ? 'Searching...' : `${totalResults} Results ${query ? `for "${query}"` : ''}`}
             </h2>
             <button
               onClick={() => setShowFilters(!showFilters)}
@@ -195,7 +220,12 @@ const SearchPage = () => {
             </button>
           </div>
 
-          {searchResults.length > 0 ? (
+          {loading ? (
+            <div className="text-center py-12">
+              <Loader2 size={48} className="mx-auto text-gray-400 mb-4 animate-spin" />
+              <p className="text-gray-600">Searching products...</p>
+            </div>
+          ) : searchResults.length > 0 ? (
             <ProductGrid products={searchResults} />
           ) : (
             <div className="text-center py-12">

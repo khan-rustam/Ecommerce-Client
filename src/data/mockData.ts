@@ -230,3 +230,40 @@ export const products: Product[] = [
     new: true
   },
 ];
+
+export const trendingProducts: Product[] = [
+  {
+    id: 101,
+    name: 'Trending Sitar',
+    description: 'A trending sitar loved by musicians worldwide.',
+    price: 399.99,
+    salePrice: 349.99,
+    discount: 12,
+    images: [
+      'https://images.pexels.com/photos/164936/pexels-photo-164936.jpeg?auto=compress&w=800&q=80',
+    ],
+    category: 'music',
+    subcategory: 'string',
+    stock: 10,
+    rating: 4.9,
+    tags: ['trending', 'sitar'],
+    featured: true,
+  },
+  // ...add more trending products as needed
+];
+
+export const customerStories = [
+  {
+    id: 1,
+    name: 'Priya Sharma',
+    story: 'I found the perfect tabla set for my son. The quality is amazing and delivery was super fast!',
+    image: 'https://randomuser.me/api/portraits/women/44.jpg',
+  },
+  {
+    id: 2,
+    name: 'Amit Verma',
+    story: 'The handcrafted flute exceeded my expectations. Will definitely shop again!',
+    image: 'https://randomuser.me/api/portraits/men/32.jpg',
+  },
+  // ...add more stories as needed
+];

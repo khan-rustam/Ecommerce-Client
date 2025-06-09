@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Link } from 'react-router-dom';
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
@@ -20,7 +20,7 @@ const CartPage = () => {
         <p className="mb-8 text-gray-600">Looks like you haven't added any products to your cart yet.</p>
         <Link 
           to="/"
-          className="bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-6 rounded-md transition-colors"
+          className="bg-[var(--brand-primary)] text-white font-medium py-2 px-6 rounded-md transition-colors"
         >
           Start Shopping
         </Link>

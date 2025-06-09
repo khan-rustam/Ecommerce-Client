@@ -1,6 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+:root {
+    --color-primary: #1A73E8;
+    --color-secondary: #F9AB00;
+    --color-accent: #34A853;
+    --color-background: #FFFFFF;
+    --logo-url: url('/src/assets/logo.png');
+}
+
 
 /* Hide scrollbars globally */
 

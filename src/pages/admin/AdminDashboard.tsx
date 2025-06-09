@@ -1,5 +1,4 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useBrandColors } from "../../contexts/BrandColorContext";
 
 import {
@@ -26,18 +25,18 @@ const grossSalesData = [
   { date: "18 Apr", value: 0 },
   { date: "19 Apr", value: 0 },
   { date: "20 Apr", value: 0 },
-  { date: "21 Apr", value: 0 },
+  { date: "21 Apr", value: 9 },
   { date: "22 Apr", value: 0 },
   { date: "23 Apr", value: 0 },
   { date: "24 Apr", value: 0 },
-  { date: "25 Apr", value: 0 },
+  { date: "25 Apr", value: 9 },
   { date: "26 Apr", value: 0 },
   { date: "27 Apr", value: 0 },
   { date: "28 Apr", value: 0 },
-  { date: "29 Apr", value: 0 },
+  { date: "29 Apr", value: 88 },
   { date: "30 Apr", value: 0 },
   { date: "01 May", value: 0 },
-  { date: "02 May", value: 0 },
+  { date: "02 May", value: 5 },
   { date: "03 May", value: 0 },
   { date: "04 May", value: 0 },
   { date: "05 May", value: 0 },
@@ -81,6 +80,13 @@ const dashboardCards = [
     count: 1,
     img: "https://ipestretail.com/images/icons/brands.svg",
     to: "/admin/brands",
+    sub: null,
+  },
+  {
+    label: "Banners",
+    count: 0,
+    img: "https://ipestretail.com/images/icons/images.svg",
+    to: "/admin/banners",
     sub: null,
   },
   {
@@ -205,7 +211,7 @@ const AdminDashboard = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-8">
           {dashboardCards.map((card, idx) => (
             <div
-              key={card.label}
+              key={idx}
               className="bg-white rounded-xl border border-gray-200 flex flex-col items-center p-8 cursor-pointer hover:shadow-lg transition group"
               onClick={() => card.to && card.to !== "#" && navigate(card.to)}
               style={{ minHeight: 220 }}
@@ -232,6 +238,7 @@ const AdminDashboard = () => {
             </div>
           ))}
         </div>
+        <Link to="/admin/warehouses">Manage Warehouses</Link>
       </div>
     </div>
   );

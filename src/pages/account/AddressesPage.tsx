@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { Profile } from '../../api';
 import { MapPin, Home, Building, Landmark } from 'lucide-react';
 import { useBrandColors } from '../../contexts/BrandColorContext';
+import AccountLayout from '../../components/layout/AccountLayout';
 
 const emptyAddress = {
   name: '',
@@ -153,7 +154,7 @@ const AddressesPage = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-8" style={{ background: colors.background, color: colors.text }}>
+    <AccountLayout>
       <h2 className="text-2xl font-bold mb-6" style={{ color: colors.primary }}>Manage Addresses</h2>
       <button
         className="mb-4 px-4 py-2 rounded shadow transition font-semibold"
@@ -256,7 +257,8 @@ const AddressesPage = () => {
           </div>
         </div>
       )}
-    </div>
+    </AccountLayout>
   );
 };
+
 export default AddressesPage; 

@@ -19,6 +19,7 @@ const AdminNotice: React.FC = () => {
   const [form, setForm] = useState({ message: "", startDate: "", endDate: "" });
   const [editId, setEditId] = useState<number | null>(null);
 
+
   if (!user || !user.isAdmin) return <Navigate to="/" />;
 
   const handleAdd = () => {
@@ -53,7 +54,7 @@ const AdminNotice: React.FC = () => {
   };
 
   return (
-    <div className="p-6 md:p-10 max-w-5xl mx-auto">
+    <div className="p-6 md:p-10 max-w-5xl mx-auto relative">
       <h1 className="text-2xl font-semibold mb-6 text-gray-800">Notice</h1>
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         {!showForm && notices.length === 0 && (
@@ -64,7 +65,7 @@ const AdminNotice: React.FC = () => {
             <div className="text-xl font-semibold text-gray-500 mb-2">No Notices Uploaded Yet</div>
             <div className="text-gray-400 mb-6">Create your first notice to display important information to users.</div>
             <button
-              className="px-6 py-2 rounded bg-[var(--brand-primary,#475569)] text-white font-semibold hover:bg-[var(--brand-primary-hover,#334155)] transition"
+              className="px-6 py-2 rounded bg-[var(--brand-primary,#475569)] text-white font-semibold hover:bg-[var(--brand-primary/80)] transition"
               onClick={handleAdd}
             >
               Add Notice
@@ -76,7 +77,7 @@ const AdminNotice: React.FC = () => {
             <div className="flex items-center justify-between mb-4">
               <div className="text-lg font-semibold">Create notice</div>
               <button
-                className="px-4 py-2 rounded bg-[var(--brand-primary,#475569)] text-white font-semibold hover:bg-[var(--brand-primary-hover,#334155)] transition"
+                className="px-4 py-2 rounded bg-[var(--brand-primary,#475569)] text-white font-semibold hover:bg-[var(--brand-primary/80)] transition"
                 onClick={handleSave}
               >
                 Save
@@ -162,6 +163,8 @@ const AdminNotice: React.FC = () => {
           </>
         )}
       </div>
+
+      
     </div>
   );
 };

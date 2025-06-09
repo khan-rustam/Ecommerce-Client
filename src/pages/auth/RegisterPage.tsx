@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { Register, Login } from "../../api";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../store/userSlice";
+import { useBrandColors } from "../../contexts/BrandColorContext";
 
 const RegisterPage = () => {
   const [username, setUsername] = useState("");
@@ -18,6 +19,7 @@ const RegisterPage = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { colors } = useBrandColors();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,11 +33,16 @@ const RegisterPage = () => {
       const res = await fetch(`${Register}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, phoneNumber: phone, password, confirmPassword }),
+        body: JSON.stringify({
+          username,
+          email,
+          phoneNumber: phone,
+          password,
+          confirmPassword,
+        }),
       });
       const data = await res.json();
-      if (!res.ok)
-        throw new Error(data.msg || "Registration failed");
+      if (!res.ok) throw new Error(data.msg || "Registration failed");
       toast.success("Registration successful!");
       // Automatically log in after registration
       const loginBody = email
@@ -68,17 +75,10 @@ const RegisterPage = () => {
         className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-xl"
       >
         <div className="text-center">
-          {/* <Link to="/" className="inline-block">
-            <img
-              src="https://via.placeholder.com/200x60?text=Ecommerce"
-              alt="Ecommerce"
-              className="h-12 transition-transform hover:scale-105"
-            />
-          </Link> */}
-          <h2 className="text-3xl font-bold text-gray-900">
+          <h2 className="text-3xl font-bold" style={{ color: colors.primary }}>
             Create your account
           </h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <p className="mt-2 text-sm" style={{ color: colors.text }}>
             Join us and start shopping today
           </p>
         </div>
@@ -92,16 +92,16 @@ const RegisterPage = () => {
               >
                 Username
               </label>
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  required
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
-                  placeholder="Enter your username"
-                />
+              <input
+                id="username"
+                name="username"
+                type="text"
+                required
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent transition-all"
+                placeholder="Enter your username"
+              />
             </div>
 
             <div className="group">
@@ -111,16 +111,16 @@ const RegisterPage = () => {
               >
                 Email address
               </label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
-                placeholder="Enter your email (optional)"
-                />
-              </div>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent transition-all"
+                placeholder="Enter your email address"
+              />
+            </div>
 
             <div className="group">
               <label
@@ -135,7 +135,7 @@ const RegisterPage = () => {
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
+                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent transition-all"
                 placeholder="Enter your phone number (optional)"
               />
             </div>
@@ -155,7 +155,7 @@ const RegisterPage = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none relative block w-full px-3 py-2 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
+                  className="appearance-none relative block w-full px-3 py-2 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent transition-all"
                   placeholder="Create a password"
                 />
                 <button
@@ -189,7 +189,7 @@ const RegisterPage = () => {
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="appearance-none relative block w-full px-3 py-2 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
+                  className="appearance-none relative block w-full px-3 py-2 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-transparent transition-all"
                   placeholder="Confirm your password"
                 />
                 <button
@@ -215,20 +215,22 @@ const RegisterPage = () => {
               name="terms"
               type="checkbox"
               required
-              className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
+              className="h-4 w-4 focus:ring-2 focus:ring-[var(--brand-primary)] border-gray-300 rounded"
             />
-            <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
+            <label htmlFor="terms" className="ml-2 block text-sm" style={{ color: colors.text }}>
               I agree to the{" "}
               <Link
                 to="/terms"
-                className="font-medium text-orange-600 hover:text-orange-500 transition-colors"
+                className="font-medium hover:underline transition-colors"
+                style={{ color: colors.primary }}
               >
                 Terms of Service
               </Link>{" "}
               and{" "}
               <Link
                 to="/privacy"
-                className="font-medium text-orange-600 hover:text-orange-500 transition-colors"
+                className="font-medium hover:underline transition-colors"
+                style={{ color: colors.primary }}
               >
                 Privacy Policy
               </Link>
@@ -241,7 +243,8 @@ const RegisterPage = () => {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              style={{ backgroundColor: colors.primary }}
             >
               {loading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -260,7 +263,8 @@ const RegisterPage = () => {
             Already have an account?{" "}
             <Link
               to="/auth/login"
-              className="font-medium text-orange-600 hover:text-orange-500 transition-colors"
+              className="font-medium hover:underline transition-colors"
+              style={{ color: colors.primary }}
             >
               Sign in
             </Link>

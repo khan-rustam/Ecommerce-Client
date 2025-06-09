@@ -1,4 +1,3 @@
-import React from 'react';
 import { MapPin, Edit, Trash2, Eye } from 'lucide-react';
 
 const addresses = [

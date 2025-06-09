@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../store/userSlice";
 import { Login, UserLogin } from "../../api";
+import { useBrandColors } from "../../contexts/BrandColorContext";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -22,13 +23,15 @@ const LoginPage = () => {
   const [forgotOtpVerified, setForgotOtpVerified] = useState(false);
   const [forgotConfirmPassword, setForgotConfirmPassword] = useState("");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
-  const [showForgotConfirmPassword, setShowForgotConfirmPassword] = useState(false);
+  const [showForgotConfirmPassword, setShowForgotConfirmPassword] =
+    useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { colors } = useBrandColors();
 
   useEffect(() => {
-    const savedEmail = localStorage.getItem('rememberedEmail');
+    const savedEmail = localStorage.getItem("rememberedEmail");
     if (savedEmail) {
       setEmail(savedEmail);
       setRememberMe(true);
@@ -48,9 +51,9 @@ const LoginPage = () => {
       if (!res.ok) throw new Error(data.msg || "Invalid email or password");
       dispatch(setUser({ user: data.user, token: data.token }));
       if (rememberMe) {
-        localStorage.setItem('rememberedEmail', email);
+        localStorage.setItem("rememberedEmail", email);
       } else {
-        localStorage.removeItem('rememberedEmail');
+        localStorage.removeItem("rememberedEmail");
       }
       toast.success("Welcome back!");
       navigate("/");
@@ -71,7 +74,11 @@ const LoginPage = () => {
         body: JSON.stringify({ email: forgotEmail, updateData: {} }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.msg || (res.status === 404 ? "User not found" : "Failed to send OTP"));
+      if (!res.ok)
+        throw new Error(
+          data.msg ||
+            (res.status === 404 ? "User not found" : "Failed to send OTP")
+        );
       toast.success("OTP sent to your email");
       setForgotStep(2);
     } catch (err: any) {
@@ -105,7 +112,8 @@ const LoginPage = () => {
           body: JSON.stringify({ email: forgotEmail, otp: forgotOtp }),
         });
         const data = await res.json();
-        if (!res.ok || !data.otpValid) throw new Error(data.msg || "Invalid OTP");
+        if (!res.ok || !data.otpValid)
+          throw new Error(data.msg || "Invalid OTP");
         setForgotOtpVerified(true);
         toast.success("OTP verified! Now set your new password.");
         setForgotLoading(false);
@@ -125,7 +133,11 @@ const LoginPage = () => {
       const res = await fetch(`${UserLogin}/verify-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: forgotEmail, otp: forgotOtp, updateData: { password: forgotNewPassword } }),
+        body: JSON.stringify({
+          email: forgotEmail,
+          otp: forgotOtp,
+          updateData: { password: forgotNewPassword },
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.msg || "Failed to reset password");
@@ -161,8 +173,10 @@ const LoginPage = () => {
               className="h-12 transition-transform hover:scale-105"
             />
           </Link> */}
-          <h2 className="text-3xl font-bold text-gray-900">Welcome back</h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <h2 className="text-3xl font-bold" style={{ color: colors.primary }}>
+            Welcome back
+          </h2>
+          <p className="mt-2 text-sm" style={{ color: colors.text }}>
             Sign in to your account to continue
           </p>
         </div>
@@ -184,7 +198,7 @@ const LoginPage = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
+                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-[var(--brand-primary)] transition-all"
                 placeholder="Enter your email"
               />
             </div>
@@ -205,7 +219,7 @@ const LoginPage = () => {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none relative block w-full px-3 py-2 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-all"
+                  className="appearance-none relative block w-full px-3 py-2 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)] focus:border-[var(--brand-primary)] transition-all"
                   placeholder="Enter your password"
                 />
                 <button
@@ -231,9 +245,9 @@ const LoginPage = () => {
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
-                className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
+                className="h-4 w-4 text-[var(--brand-primary)] focus:ring-[var(--brand-primary)] border-gray-300 rounded"
                 checked={rememberMe}
-                onChange={e => setRememberMe(e.target.checked)}
+                onChange={(e) => setRememberMe(e.target.checked)}
               />
               <label
                 htmlFor="remember-me"
@@ -246,7 +260,8 @@ const LoginPage = () => {
             <div className="text-sm">
               <button
                 type="button"
-                className="font-medium text-orange-600 hover:text-orange-500 transition-colors"
+                className="font-medium"
+                style={{ color: colors.primary }}
                 onClick={() => setShowForgot(true)}
               >
                 Forgot your password?
@@ -260,7 +275,8 @@ const LoginPage = () => {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              style={{ backgroundColor: colors.primary }}
             >
               {loading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -279,7 +295,8 @@ const LoginPage = () => {
             Don't have an account?{" "}
             <Link
               to="/auth/register"
-              className="font-medium text-orange-600 hover:text-orange-500 transition-colors"
+              className="font-medium hover:underline transition-colors"
+              style={{ color: colors.primary }}
             >
               Sign up
             </Link>
@@ -292,7 +309,7 @@ const LoginPage = () => {
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
           <div className="bg-white rounded-xl shadow-xl p-8 w-full max-w-md relative z-10">
             <button
-              className="absolute top-2 right-2 text-gray-400 hover:text-orange-500 text-xl"
+              className="absolute top-2 right-2 text-gray-400 hover:text-[var(--brand-primary)] text-xl"
               onClick={() => {
                 setShowForgot(false);
                 setForgotStep(1);
@@ -306,19 +323,27 @@ const LoginPage = () => {
             >
               &times;
             </button>
-            <h3 className="text-xl font-bold mb-4 text-center text-gray-900">Reset Password</h3>
+            <h3
+              className="text-xl font-bold mb-4 text-center"
+              style={{ color: colors.primary }}
+            >
+              Reset Password
+            </h3>
             {forgotStep === 1 ? (
               <>
-                <label className="block text-sm font-medium mb-2">Enter your email</label>
+                <label className="block text-sm font-medium mb-2">
+                  Enter your email
+                </label>
                 <input
                   type="email"
                   value={forgotEmail}
-                  onChange={e => setForgotEmail(e.target.value)}
+                  onChange={(e) => setForgotEmail(e.target.value)}
                   className="w-full border rounded px-3 py-2 mb-4"
                   placeholder="Email address"
                 />
                 <button
-                  className="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded font-semibold"
+                  className="w-full"
+                  style={{ background: colors.primary, color: "#fff" }}
                   onClick={handleForgotPassword}
                   disabled={forgotLoading}
                 >
@@ -327,7 +352,9 @@ const LoginPage = () => {
               </>
             ) : !forgotOtpVerified ? (
               <>
-                <label className="block text-sm font-medium mb-2">Enter OTP</label>
+                <label className="block text-sm font-medium mb-2">
+                  Enter OTP
+                </label>
                 <div className="flex gap-2 justify-center mb-4">
                   {otpBoxes.map((val, idx) => (
                     <input
@@ -337,14 +364,15 @@ const LoginPage = () => {
                       inputMode="numeric"
                       maxLength={1}
                       value={val}
-                      onChange={e => handleOtpBoxChange(idx, e.target.value)}
+                      onChange={(e) => handleOtpBoxChange(idx, e.target.value)}
                       className="w-10 h-12 text-center border rounded text-lg font-bold focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                       autoFocus={idx === 0}
                     />
                   ))}
                 </div>
                 <button
-                  className="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded font-semibold"
+                  className="w-full"
+                  style={{ background: colors.primary, color: "#fff" }}
                   onClick={handleForgotReset}
                   disabled={forgotLoading}
                 >
@@ -353,12 +381,14 @@ const LoginPage = () => {
               </>
             ) : (
               <>
-                <label className="block text-sm font-medium mb-2">New Password</label>
+                <label className="block text-sm font-medium mb-2">
+                  New Password
+                </label>
                 <div className="relative mb-4">
                   <input
                     type={showForgotPassword ? "text" : "password"}
                     value={forgotNewPassword}
-                    onChange={e => setForgotNewPassword(e.target.value)}
+                    onChange={(e) => setForgotNewPassword(e.target.value)}
                     className="w-full border rounded px-3 py-2"
                     placeholder="New password"
                   />
@@ -369,15 +399,21 @@ const LoginPage = () => {
                     onClick={() => setShowForgotPassword((prev) => !prev)}
                     style={{ background: "none", border: "none", padding: 0 }}
                   >
-                    {showForgotPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    {showForgotPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
                   </button>
                 </div>
-                <label className="block text-sm font-medium mb-2">Confirm New Password</label>
+                <label className="block text-sm font-medium mb-2">
+                  Confirm New Password
+                </label>
                 <div className="relative mb-4">
                   <input
                     type={showForgotConfirmPassword ? "text" : "password"}
                     value={forgotConfirmPassword}
-                    onChange={e => setForgotConfirmPassword(e.target.value)}
+                    onChange={(e) => setForgotConfirmPassword(e.target.value)}
                     className="w-full border rounded px-3 py-2"
                     placeholder="Confirm new password"
                   />
@@ -385,14 +421,21 @@ const LoginPage = () => {
                     type="button"
                     className="absolute inset-y-0 right-2 flex items-center text-gray-400 focus:outline-none"
                     tabIndex={-1}
-                    onClick={() => setShowForgotConfirmPassword((prev) => !prev)}
+                    onClick={() =>
+                      setShowForgotConfirmPassword((prev) => !prev)
+                    }
                     style={{ background: "none", border: "none", padding: 0 }}
                   >
-                    {showForgotConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    {showForgotConfirmPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
                   </button>
                 </div>
                 <button
-                  className="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded font-semibold"
+                  className="w-full"
+                  style={{ background: colors.primary, color: "#fff" }}
                   onClick={handleForgotReset}
                   disabled={forgotLoading}
                 >
