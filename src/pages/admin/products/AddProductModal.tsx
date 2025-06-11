@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import { X, UploadCloud } from "lucide-react";
-import { useBrandColors } from "../../../contexts/BrandColorContext";
 
 const countries = ["USA", "India", "UK", "Germany", "France", "Australia"];
 const productTypes = ["Simple", "Variable", "Bundled"];
@@ -29,7 +28,6 @@ export default function AddProductModal({
   open: boolean;
   onClose: () => void;
 }) {
-  const { colors } = useBrandColors();
   const [form, setForm] = useState({
     name: "",
     category: "",
@@ -149,7 +147,7 @@ export default function AddProductModal({
             borderTopRightRadius: "0.5rem",
           }}
         >
-          <h2 className="text-2xl font-bold mb-0" style={{ color: colors.primary }}>
+          <h2 className="text-2xl font-bold mb-0" style={{ color: 'var(--brand-primary)' }}>
             Create Products
           </h2>
           <button
@@ -175,9 +173,9 @@ export default function AddProductModal({
                 required
                 className="mt-1 px-3 py-2 rounded-lg border focus:ring-2 focus:ring-[var(--brand-accent)] focus:outline-none w-full"
                 style={{
-                  borderColor: colors.accent,
-                  color: colors.text,
-                  background: colors.background,
+                  borderColor: 'var(--brand-accent)',
+                  color: 'var(--brand-text)',
+                  background: 'var(--brand-bg)',
                 }}
                 value={form.name}
                 onChange={handleInput}
@@ -192,9 +190,9 @@ export default function AddProductModal({
                 required
                 className="mt-1 px-3 py-2 rounded-lg border focus:ring-2 focus:ring-[var(--brand-accent)] focus:outline-none w-full min-h-[100px]"
                 style={{
-                  borderColor: colors.accent,
-                  color: colors.text,
-                  background: colors.background,
+                  borderColor: 'var(--brand-accent)',
+                  color: 'var(--brand-text)',
+                  background: 'var(--brand-bg)',
                 }}
                 value={form.description}
                 onChange={handleInput}
@@ -333,7 +331,7 @@ export default function AddProductModal({
                 onDragLeave={handleDrag}
                 onDrop={handleDrop}
               >
-                <UploadCloud size={40} style={{ color: colors.primary }} />
+                <UploadCloud size={40} style={{ color: 'var(--brand-primary)' }} />
                 <span className="text-base text-gray-500 text-center mt-2">
                   Upload up to 5 images (jpg, png, max 20 MB each)
                 </span>
@@ -627,7 +625,7 @@ export default function AddProductModal({
             <button
               type="submit"
               className="px-6 py-3 rounded-lg font-semibold shadow-lg transition text-base"
-              style={{ background: colors.primary, color: colors.background }}
+              style={{ background: 'var(--brand-primary)', color: 'var(--brand-bg)' }}
             >
               Save
             </button>

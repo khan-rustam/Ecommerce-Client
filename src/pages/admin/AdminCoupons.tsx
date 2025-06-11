@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useBrandColors } from "../../contexts/BrandColorContext";
 import { Plus, FileText, Save, X } from "lucide-react";
 
 const initialPromocodes: any[] = [];
@@ -13,7 +12,6 @@ const PromocodeModal = ({
   onClose: () => void;
   onSave: (promo: any) => void;
 }) => {
-  const { colors } = useBrandColors();
   const [form, setForm] = useState({
     code: "",
     percent: false,
@@ -38,7 +36,7 @@ const PromocodeModal = ({
         </button>
         <h2
           className="text-xl font-bold mb-6"
-          style={{ color: colors.primary }}
+          style={{ color: 'var(--brand-primary)' }}
         >
           Create promocode
         </h2>
@@ -161,7 +159,7 @@ const PromocodeModal = ({
           <button
             type="submit"
             className="mt-4 flex items-center justify-center gap-2 px-6 py-3 rounded-lg font-semibold shadow hover:scale-105 transition text-base"
-            style={{ background: colors.primary, color: colors.background }}
+            style={{ background: 'var(--brand-primary)', color: 'var(--brand-background)' }}
             disabled={saving}
           >
             <Save size={18} /> Save
@@ -173,7 +171,6 @@ const PromocodeModal = ({
 };
 
 const AdminCoupons = () => {
-  const { colors } = useBrandColors();
   const [promocodes, setPromocodes] = useState(initialPromocodes);
   const [showModal, setShowModal] = useState(false);
   const [search, setSearch] = useState("");
@@ -185,13 +182,13 @@ const AdminCoupons = () => {
   return (
     <div
       className="min-h-screen py-10 px-2 md:px-8 flex flex-col items-center"
-      style={{ background: colors.background }}
+      style={{ background: 'var(--brand-background)' }}
     >
       <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl p-8 animate-fade-in">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
           <h1
             className="text-2xl font-bold tracking-tight"
-            style={{ color: colors.primary }}
+            style={{ color: 'var(--brand-primary)' }}
           >
             Promocodes
           </h1>

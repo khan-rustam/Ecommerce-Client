@@ -1,5 +1,4 @@
 import { useNavigate, Link } from "react-router-dom";
-import { useBrandColors } from "../../contexts/BrandColorContext";
 
 import {
   LineChart,
@@ -148,13 +147,12 @@ const dashboardCards = [
 ];
 
 const AdminDashboard = () => {
-  const { colors } = useBrandColors();
   const navigate = useNavigate();
 
   return (
     <div
       className="p-6 min-h-screen"
-      style={{ color: colors.text, background: colors.background }}
+      style={{ color: 'var(--brand-primary)', background: 'var(--brand-bg)' }}
     >
       <div className="max-w-7xl mx-auto">
         {/* Top Stats */}

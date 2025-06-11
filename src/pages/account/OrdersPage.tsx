@@ -1,5 +1,4 @@
 import React from "react";
-import { useBrandColors } from "../../contexts/BrandColorContext";
 
 const mockOrders = [
   { id: "1001", date: "2024-06-01", status: "Delivered", total: "₹1,299" },
@@ -8,21 +7,20 @@ const mockOrders = [
 ];
 
 const OrdersPage = () => {
-  const { colors } = useBrandColors();
   return (
     <div
       className="max-w-3xl mx-auto p-8 mt-28"
-      style={{ background: colors.background, color: colors.text }}
+      style={{ background: 'var(--brand-primary)', color: 'var(--brand-text)' }}
     >
-      <h2 className="text-2xl font-bold mb-6" style={{ color: colors.primary }}>
+      <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--brand-primary)' }}>
         My Orders
       </h2>
       <table
         className="w-full border rounded shadow text-left"
-        style={{ background: colors.accent }}
+        style={{ background: 'var(--brand-accent)' }}
       >
         <thead>
-          <tr style={{ background: colors.secondary }}>
+          <tr style={{ background: 'var(--brand-secondary)' }}>
             <th className="py-2 px-4">Order #</th>
             <th className="py-2 px-4">Date</th>
             <th className="py-2 px-4">Status</th>
@@ -39,7 +37,7 @@ const OrdersPage = () => {
               <td className="py-2 px-4">{order.total}</td>
               <td className="py-2 px-4">
                 <button
-                  style={{ color: colors.primary }}
+                  style={{ color: 'var(--brand-primary)' }}
                   className="hover:underline font-medium"
                 >
                   View Details

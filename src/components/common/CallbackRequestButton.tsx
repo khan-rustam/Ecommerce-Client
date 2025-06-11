@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Phone, CheckCircle2 } from "lucide-react";
-import { useBrandColors } from '../../contexts/BrandColorContext';
 import toast from 'react-hot-toast';
 
 const initialForm = {
@@ -13,7 +12,6 @@ const initialForm = {
 };
 
 const CallbackRequestButton: React.FC = () => {
-  const { colors } = useBrandColors();
   const [modalOpen, setModalOpen] = useState(false);
   const [form, setForm] = useState(initialForm);
   const [loading, setLoading] = useState(false);
@@ -48,7 +46,7 @@ const CallbackRequestButton: React.FC = () => {
       {/* Sticky Call Button */}
       <button
         className="fixed bottom-6 right-6 z-50 shadow-lg rounded-full w-16 h-16 flex items-center justify-center text-3xl focus:outline-none"
-        style={{ background: colors.primary, color: colors.buttonText || '#fff' }}
+        style={{ background: 'var(--brand-primary)', color: '#fff' }}
         onClick={() => setModalOpen(true)}
         title="Request Callback"
       >
@@ -58,7 +56,7 @@ const CallbackRequestButton: React.FC = () => {
       {/* Callback Request Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 relative border border-slate-100" style={{ color: colors.text }}>
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-8 relative border border-slate-100" style={{ color: 'var(--brand-text)' }}>
             <button
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-2xl"
               onClick={() => setModalOpen(false)}
@@ -66,7 +64,7 @@ const CallbackRequestButton: React.FC = () => {
             >
               &times;
             </button>
-            <h2 className="text-2xl font-bold mb-4 flex items-center gap-2" style={{ color: colors.primary }}>
+            <h2 className="text-2xl font-bold mb-4 flex items-center gap-2" style={{ color: 'var(--brand-primary)' }}>
               <Phone className="text-green-600" /> Request Callback
             </h2>
             {success ? (
@@ -146,7 +144,7 @@ const CallbackRequestButton: React.FC = () => {
                   <button
                     type="submit"
                     className="px-6 py-2 rounded-lg font-semibold transition shadow"
-                    style={{ background: colors.primary, color: colors.buttonText || '#fff' }}
+                    style={{ background: 'var(--brand-primary)', color: '#fff' }}
                     disabled={!form.name || !form.phone || !form.recaptcha || loading}
                   >
                     {loading ? "Requesting..." : "Request Now"}

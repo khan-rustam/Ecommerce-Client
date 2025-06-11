@@ -6,13 +6,11 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import toast from 'react-hot-toast';
 import BlogService, { Blog } from '../../../utils/BlogService';
-import { useBrandColors } from '../../../contexts/BrandColorContext';
 
 const EditBlog: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const user = useSelector((state: any) => state.user.user);
   const navigate = useNavigate();
-  const { colors } = useBrandColors();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Form state
@@ -230,7 +228,7 @@ const EditBlog: React.FC = () => {
   if (isFetching) {
     return (
       <div className="flex justify-center items-center h-96">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2" style={{ borderColor: colors.primary }}></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2" style={{ borderColor: 'var(--brand-primary)' }}></div>
       </div>
     );
   }
@@ -264,7 +262,7 @@ const EditBlog: React.FC = () => {
             <ArrowLeft size={18} />
             Back to Blogs
           </button>
-          <h1 className="text-2xl md:text-3xl font-bold" style={{ color: colors.primary }}>
+          <h1 className="text-2xl md:text-3xl font-bold" style={{ color: 'var(--brand-primary)' }}>
             Edit Blog
           </h1>
         </div>

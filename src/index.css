@@ -7,6 +7,11 @@
     --color-accent: #34A853;
     --color-background: #FFFFFF;
     --logo-url: url('/src/assets/logo.png');
+    /* Brand color palette */
+    --brand-primary: #2E5767;
+    --brand-accent: #746A9F;
+    --brand-neutral: #747474;
+    --brand-bg: #E6E5E8;
 }
 
 

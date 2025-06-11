@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { get } from '../../utils/authFetch';
-import { useBrandColors } from '../../contexts/BrandColorContext';
 
 interface SmartBanner {
   _id: string;
@@ -17,7 +16,6 @@ interface SmartBanner {
 const SmartBannerPopup: React.FC = () => {
   const [banner, setBanner] = useState<SmartBanner | null>(null);
   const [visible, setVisible] = useState(false);
-  const { colors } = useBrandColors();
 
   useEffect(() => {
     fetchActiveBanner();
@@ -28,9 +26,7 @@ const SmartBannerPopup: React.FC = () => {
       const { pathname } = window.location;
       const page = pathname === '/' ? 'home' : pathname.substring(1);
       
-      const responseData = await get('/smart-banners/active', {
-        params: { page }
-      });
+      const responseData = await get(`/smart-banners/active?page=${encodeURIComponent(page)}`);
       
       if (responseData && responseData.length > 0) {
         // Get the first active banner
@@ -123,7 +119,7 @@ const SmartBannerPopup: React.FC = () => {
           )}
           
           <div className="p-6">
-            <h2 className="text-xl font-bold mb-2" style={{ color: colors.primary }}>
+            <h2 className="text-xl font-bold mb-2" style={{ color: 'var(--brand-primary)' }}>
               {banner.title}
             </h2>
             
@@ -135,7 +131,7 @@ const SmartBannerPopup: React.FC = () => {
               <Link 
                 to={banner.url}
                 className="inline-block px-6 py-2 rounded font-medium text-white transition-colors"
-                style={{ backgroundColor: colors.primary, border: `1px solid ${colors.primary}` }}
+                style={{ backgroundColor: 'var(--brand-primary)', border: '1px solid var(--brand-primary)' }}
                 onClick={closeBanner}
               >
                 Shop Now

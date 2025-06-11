@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { ArrowLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { useBrandColors } from '../../../contexts/BrandColorContext';
 import ProductService from '../../../utils/ProductService';
 import ProductForm from '../../../components/ProductManager/ProductForm';
 
@@ -13,7 +12,6 @@ import ProductForm from '../../../components/ProductManager/ProductForm';
  */
 const CreateProduct = () => {
   const navigate = useNavigate();
-  const { colors } = useBrandColors();
   const user = useSelector((state) => state.user.user);
   const [isLoading, setIsLoading] = useState(false);
   

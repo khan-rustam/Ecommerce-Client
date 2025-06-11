@@ -11,7 +11,6 @@ import {
   Pencil,
 } from "lucide-react";
 import BlogService, { Blog } from "../utils/BlogService";
-import { useBrandColors } from "../contexts/BrandColorContext";
 import { useSelector } from "react-redux";
 
 const BlogDetailPage: React.FC = () => {
@@ -20,7 +19,6 @@ const BlogDetailPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [relatedBlogs, setRelatedBlogs] = useState<Blog[]>([]);
-  const { colors } = useBrandColors();
   const navigate = useNavigate();
   const user = useSelector((state: any) => state.user.user);
 
@@ -113,7 +111,7 @@ const BlogDetailPage: React.FC = () => {
       <div className="flex justify-center items-center h-96">
         <div
           className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2"
-          style={{ borderColor: colors.primary }}
+          style={{ borderColor: 'var(--brand-primary)' }}
         ></div>
       </div>
     );
@@ -238,7 +236,7 @@ const BlogDetailPage: React.FC = () => {
         <div className="mt-16">
           <h2
             className="text-2xl font-bold mb-8"
-            style={{ color: colors.primary }}
+            style={{ color: 'var(--brand-primary)' }}
           >
             Related Blogs
           </h2>

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useBrandColors } from "../../contexts/BrandColorContext";
 import React, { useRef } from "react";
 import {
   useSettings,
@@ -100,7 +99,6 @@ const AdminBrandSettings = () => {
   const [custom, setCustom] = useState(CUSTOM_PALETTE);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState("");
-  const { setColors } = useBrandColors();
   const [logoWidth, setLogoWidth] = useState(settings.logoWidth || 48);
   const [logoHeight, setLogoHeight] = useState(settings.logoHeight || 48);
   const [logoSizeChanged, setLogoSizeChanged] = useState(false);
@@ -119,13 +117,6 @@ const AdminBrandSettings = () => {
     mapIframe: "",
     footerDescription: "",
   });
-
-  // Color preview state
-  const colors = selected.name === "Custom" ? custom : selected;
-
-  // Compute live background and accent
-  const liveAccent = colors.accent;
-  const livePrimary = colors.primary;
 
   // Toast helpers
   const showSuccess = (msg: string) => toast.success(msg);
@@ -178,19 +169,12 @@ const AdminBrandSettings = () => {
           if (data.logoHeight) setLogoHeight(data.logoHeight);
         }
       });
-    setColors({
-      primary: colors.primary,
-      secondary: colors.secondary,
-      accent: colors.accent,
-      background: colors.background,
-      text: colors.text,
-    });
-    document.documentElement.style.setProperty("--brand-accent", colors.accent);
+    document.documentElement.style.setProperty("--brand-accent", selected.accent);
     document.documentElement.style.setProperty(
       "--brand-background",
-      colors.background
+      selected.background
     );
-    document.documentElement.style.setProperty("--brand-text", colors.text);
+    document.documentElement.style.setProperty("--brand-text", selected.text);
   }, [settings.paletteName, settings.logoWidth, settings.logoHeight]);
 
   useEffect(() => {
@@ -209,19 +193,12 @@ const AdminBrandSettings = () => {
   }, [settings]);
 
   const handleApply = async () => {
-    setColors({
-      primary: colors.primary,
-      secondary: colors.secondary,
-      accent: colors.accent,
-      background: colors.background,
-      text: colors.text,
-    });
-    document.documentElement.style.setProperty("--brand-accent", colors.accent);
+    document.documentElement.style.setProperty("--brand-accent", selected.accent);
     document.documentElement.style.setProperty(
       "--brand-background",
-      colors.background
+      selected.background
     );
-    document.documentElement.style.setProperty("--brand-text", colors.text);
+    document.documentElement.style.setProperty("--brand-text", selected.text);
     setMessage("Brand settings saved and applied!");
     try {
       const body: any = { paletteName: selected.name };
@@ -293,7 +270,7 @@ const AdminBrandSettings = () => {
         <section className="rounded-2xl shadow-lg p-8 flex flex-col gap-6 border border-slate-200 bg-white h-fit">
           <h2
             className="text-2xl font-extrabold mb-2 tracking-tight"
-            style={{ color: livePrimary }}
+            style={{ color: 'var(--brand-primary)' }}
           >
             Color Palette & Customization
           </h2>
@@ -377,8 +354,8 @@ const AdminBrandSettings = () => {
             className="mt-6 px-6 py-2 rounded-lg font-bold shadow bg-gradient-to-r text-white text-lg hover:scale-105 transition-all"
             style={{
               letterSpacing: 1,
-              color: livePrimary,
-              background: liveAccent,
+              color: 'var(--brand-primary)',
+              background: 'var(--brand-accent)',
             }}
             onClick={handleApply}
             type="button"
@@ -390,7 +367,7 @@ const AdminBrandSettings = () => {
         <section className="rounded-2xl shadow-lg p-8 flex flex-col bg-white gap-4 border border-slate-200 h-fit">
           <h2
             className="text-2xl font-extrabold mb-2 tracking-tight"
-            style={{ color: livePrimary }}
+            style={{ color: 'var(--brand-primary)' }}
           >
             Website Details
           </h2>
@@ -400,14 +377,14 @@ const AdminBrandSettings = () => {
               className="rounded-lg px-4 py-2 border border-gray-200 focus:outline-none focus:ring-2"
               style={{
                 background: "#fff",
-                color: colors.text,
+                color: 'var(--brand-text)',
                 borderColor: "#eee",
                 transition: "border 0.3s",
               }}
               name="name"
               value={websiteDetails.name}
               onChange={handleWebsiteDetailsChange}
-              onFocus={(e) => (e.target.style.borderColor = livePrimary)}
+              onFocus={(e) => (e.target.style.borderColor = 'var(--brand-primary)')}
               onBlur={(e) => (e.target.style.borderColor = "#eee")}
             />
             <label className="font-semibold">Address</label>
@@ -415,14 +392,14 @@ const AdminBrandSettings = () => {
               className="rounded-lg px-4 py-2 border border-gray-200 focus:outline-none focus:ring-2"
               style={{
                 background: "#fff",
-                color: colors.text,
+                color: 'var(--brand-text)',
                 borderColor: "#eee",
                 transition: "border 0.3s",
               }}
               name="address"
               value={websiteDetails.address}
               onChange={handleWebsiteDetailsChange}
-              onFocus={(e) => (e.target.style.borderColor = livePrimary)}
+              onFocus={(e) => (e.target.style.borderColor = 'var(--brand-primary)')}
               onBlur={(e) => (e.target.style.borderColor = "#eee")}
             />
             <label className="font-semibold">Email</label>
@@ -430,14 +407,14 @@ const AdminBrandSettings = () => {
               className="rounded-lg px-4 py-2 border border-gray-200 focus:outline-none focus:ring-2"
               style={{
                 background: "#fff",
-                color: colors.text,
+                color: 'var(--brand-text)',
                 borderColor: "#eee",
                 transition: "border 0.3s",
               }}
               name="email"
               value={websiteDetails.email}
               onChange={handleWebsiteDetailsChange}
-              onFocus={(e) => (e.target.style.borderColor = livePrimary)}
+              onFocus={(e) => (e.target.style.borderColor = 'var(--brand-primary)')}
               onBlur={(e) => (e.target.style.borderColor = "#eee")}
             />
             <label className="font-semibold">Phone</label>
@@ -445,14 +422,14 @@ const AdminBrandSettings = () => {
               className="rounded-lg px-4 py-2 border border-gray-200 focus:outline-none focus:ring-2"
               style={{
                 background: "#fff",
-                color: colors.text,
+                color: 'var(--brand-text)',
                 borderColor: "#eee",
                 transition: "border 0.3s",
               }}
               name="phone"
               value={websiteDetails.phone}
               onChange={handleWebsiteDetailsChange}
-              onFocus={(e) => (e.target.style.borderColor = livePrimary)}
+              onFocus={(e) => (e.target.style.borderColor = 'var(--brand-primary)')}
               onBlur={(e) => (e.target.style.borderColor = "#eee")}
             />
             <label className="font-semibold">Facebook</label>
@@ -460,14 +437,14 @@ const AdminBrandSettings = () => {
               className="rounded-lg px-4 py-2 border border-gray-200 focus:outline-none focus:ring-2"
               style={{
                 background: "#fff",
-                color: colors.text,
+                color: 'var(--brand-text)',
                 borderColor: "#eee",
                 transition: "border 0.3s",
               }}
               name="facebook"
               value={websiteDetails.facebook}
               onChange={handleWebsiteDetailsChange}
-              onFocus={(e) => (e.target.style.borderColor = livePrimary)}
+              onFocus={(e) => (e.target.style.borderColor = 'var(--brand-primary)')}
               onBlur={(e) => (e.target.style.borderColor = "#eee")}
             />
             <label className="font-semibold">Twitter</label>
@@ -475,14 +452,14 @@ const AdminBrandSettings = () => {
               className="rounded-lg px-4 py-2 border border-gray-200 focus:outline-none focus:ring-2"
               style={{
                 background: "#fff",
-                color: colors.text,
+                color: 'var(--brand-text)',
                 borderColor: "#eee",
                 transition: "border 0.3s",
               }}
               name="twitter"
               value={websiteDetails.twitter}
               onChange={handleWebsiteDetailsChange}
-              onFocus={(e) => (e.target.style.borderColor = livePrimary)}
+              onFocus={(e) => (e.target.style.borderColor = 'var(--brand-primary)')}
               onBlur={(e) => (e.target.style.borderColor = "#eee")}
             />
             <label className="font-semibold">Instagram</label>
@@ -490,14 +467,14 @@ const AdminBrandSettings = () => {
               className="rounded-lg px-4 py-2 border border-gray-200 focus:outline-none focus:ring-2"
               style={{
                 background: "#fff",
-                color: colors.text,
+                color: 'var(--brand-text)',
                 borderColor: "#eee",
                 transition: "border 0.3s",
               }}
               name="instagram"
               value={websiteDetails.instagram}
               onChange={handleWebsiteDetailsChange}
-              onFocus={(e) => (e.target.style.borderColor = livePrimary)}
+              onFocus={(e) => (e.target.style.borderColor = 'var(--brand-primary)')}
               onBlur={(e) => (e.target.style.borderColor = "#eee")}
             />
             <label className="font-semibold">LinkedIn</label>
@@ -505,14 +482,14 @@ const AdminBrandSettings = () => {
               className="rounded-lg px-4 py-2 border border-gray-200 focus:outline-none focus:ring-2"
               style={{
                 background: "#fff",
-                color: colors.text,
+                color: 'var(--brand-text)',
                 borderColor: "#eee",
                 transition: "border 0.3s",
               }}
               name="linkedin"
               value={websiteDetails.linkedin}
               onChange={handleWebsiteDetailsChange}
-              onFocus={(e) => (e.target.style.borderColor = livePrimary)}
+              onFocus={(e) => (e.target.style.borderColor = 'var(--brand-primary)')}
               onBlur={(e) => (e.target.style.borderColor = "#eee")}
             />
             <label className="font-semibold">Map Iframe Link</label>
@@ -520,14 +497,14 @@ const AdminBrandSettings = () => {
               className="rounded-lg px-4 py-2 border border-gray-200 focus:outline-none focus:ring-2"
               style={{
                 background: "#fff",
-                color: colors.text,
+                color: 'var(--brand-text)',
                 borderColor: "#eee",
                 transition: "border 0.3s",
               }}
               name="mapIframe"
               value={websiteDetails.mapIframe}
               onChange={handleWebsiteDetailsChange}
-              onFocus={(e) => (e.target.style.borderColor = livePrimary)}
+              onFocus={(e) => (e.target.style.borderColor = 'var(--brand-primary)')}
               onBlur={(e) => (e.target.style.borderColor = "#eee")}
             />
             <label className="font-semibold">Footer Description</label>
@@ -535,14 +512,14 @@ const AdminBrandSettings = () => {
               className="rounded-lg px-4 py-2 border border-gray-200 focus:outline-none focus:ring-2"
               style={{
                 background: "#fff",
-                color: colors.text,
+                color: 'var(--brand-text)',
                 borderColor: "#eee",
                 transition: "border 0.3s",
               }}
               name="footerDescription"
               value={websiteDetails.footerDescription}
               onChange={handleWebsiteDetailsChange}
-              onFocus={(e) => (e.target.style.borderColor = livePrimary)}
+              onFocus={(e) => (e.target.style.borderColor = 'var(--brand-primary)')}
               onBlur={(e) => (e.target.style.borderColor = "#eee")}
               rows={3}
             />
@@ -551,8 +528,8 @@ const AdminBrandSettings = () => {
             className="mt-4 px-6 py-2 rounded-lg font-bold shadow bg-gradient-to-r text-white text-lg hover:scale-105 transition-all"
             style={{
               letterSpacing: 1,
-              color: livePrimary,
-              background: liveAccent,
+              color: 'var(--brand-primary)',
+              background: 'var(--brand-accent)',
               position: "sticky",
               bottom: 0,
               zIndex: 10,
@@ -589,7 +566,7 @@ const AdminBrandSettings = () => {
           <section className="rounded-2xl shadow-lg p-8 flex flex-col items-center gap-6 border border-slate-200 bg-white">
             <h2
               className="text-2xl font-bold mb-2"
-              style={{ color: livePrimary }}
+              style={{ color: 'var(--brand-primary)' }}
             >
               Change Website Logo
             </h2>
@@ -610,7 +587,7 @@ const AdminBrandSettings = () => {
                 {settings.logoHeight || 48}px
               </span>
             </div>
-            <LogoUploadSection livePrimary={livePrimary} />
+            <LogoUploadSection livePrimary='var(--brand-primary)' />
             <div className="flex flex-col gap-2 mt-4 w-full max-w-xs">
               <label className="font-semibold">
                 Logo Width (px): {logoWidth}
@@ -645,7 +622,7 @@ const AdminBrandSettings = () => {
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
                 style={{
-                  background: logoSizeChanged ? livePrimary : undefined,
+                  background: logoSizeChanged ? 'var(--brand-primary)' : undefined,
                   color: logoSizeChanged ? "#fff" : undefined,
                 }}
                 onClick={handleLogoSizeSave}

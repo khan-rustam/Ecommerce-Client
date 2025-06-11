@@ -55,6 +55,15 @@ const userSlice = createSlice({
           console.error(`Error removing ${cookieName} cookie:`, error);
         }
       });
+      // Also clear from localStorage and sessionStorage
+      try {
+        localStorage.removeItem('user');
+        localStorage.removeItem('token');
+        sessionStorage.removeItem('user');
+        sessionStorage.removeItem('token');
+      } catch (error) {
+        console.error('Error clearing user/token from storage:', error);
+      }
     },
   },
 });

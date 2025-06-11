@@ -1,12 +1,10 @@
 import { Target, Heart, Shield, Users, Award, Star } from "lucide-react";
-import { useBrandColors } from "../contexts/BrandColorContext";
 import { SettingsProvider, useSettings } from "../contexts/SettingsContext";
 
 const AboutPage = () => {
-  const { colors } = useBrandColors();
   const { settings } = useSettings();
   return (
-    <div style={{ background: colors.background, color: colors.text }}>
+    <div style={{ background: 'var(--brand-bg)', color: 'var(--brand-text)' }}>
       {/* Hero Section for About Page */}
       <section className="relative w-full h-96 bg-cover bg-center flex items-center justify-center text-white" style={{ backgroundImage: `url(${settings.aboutPageHeroImageUrl || 'https://images.unsplash.com/photo-1507679799938-3c31a8522a63?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'})` }}>
         <div className="absolute inset-0 bg-black opacity-50"></div>
@@ -27,7 +25,7 @@ const AboutPage = () => {
               className="mb-4 rounded-full shadow-xl bg-white p-4 border-4 border-white"
             />
           )}
-          <h2 className="text-3xl font-bold mb-2 mt-4" style={{ color: colors.primary }}>
+          <h2 className="text-3xl font-bold mb-2 mt-4" style={{ color: 'var(--brand-primary)' }}>
             {settings.name || "About Us"}
           </h2>
           <div className="text-center max-w-3xl">
@@ -43,11 +41,11 @@ const AboutPage = () => {
             <div className="flex items-center mb-2">
               <Target
                 className="w-10 h-10 mr-4"
-                style={{ color: colors.primary }}
+                style={{ color: 'var(--brand-primary)' }}
               />
               <h3
                 className="text-2xl font-semibold"
-                style={{ color: colors.primary }}
+                style={{ color: 'var(--brand-primary)' }}
               >
                 Our Mission
               </h3>
@@ -57,10 +55,10 @@ const AboutPage = () => {
             </p>
           </div>
           <div className="bg-white p-8 rounded-2xl shadow border border-slate-100 flex flex-col gap-4 transition-transform transform hover:scale-105 duration-300 ease-in-out">
-            <Heart className="w-10 h-10 mr-4" style={{ color: colors.primary }} />
+            <Heart className="w-10 h-10 mr-4" style={{ color: 'var(--brand-primary)' }} />
             <h3
               className="text-2xl font-semibold"
-              style={{ color: colors.primary }}
+              style={{ color: 'var(--brand-primary)' }}
             >
               Our Vision
             </h3>
@@ -72,31 +70,31 @@ const AboutPage = () => {
 
         {/* Core Values */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-center mb-8" style={{ color: colors.primary }}>
+          <h2 className="text-3xl font-bold text-center mb-8" style={{ color: 'var(--brand-primary)' }}>
             Our Core Values
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="p-8 rounded-2xl shadow border text-center flex flex-col items-center transition-transform transform hover:scale-105 duration-300 ease-in-out" style={{ background: colors.background, borderColor: colors.accent }}>
-              <Shield className="w-16 h-16 mb-4" style={{ color: colors.primary }} />
-              <h3 className="text-xl font-medium mb-3" style={{ color: colors.primary }}>
+            <div className="p-8 rounded-2xl shadow border text-center flex flex-col items-center transition-transform transform hover:scale-105 duration-300 ease-in-out" style={{ background: 'var(--brand-bg)', borderColor: 'var(--brand-accent)' }}>
+              <Shield className="w-16 h-16 mb-4" style={{ color: 'var(--brand-primary)' }} />
+              <h3 className="text-xl font-medium mb-3" style={{ color: 'var(--brand-primary)' }}>
                 Trust & Security
               </h3>
               <p className="text-gray-700">
                 {settings.trustValueText || "We prioritize the security of our customers' data and maintain transparency in all our operations."}
               </p>
             </div>
-            <div className="p-8 rounded-2xl shadow border text-center flex flex-col items-center transition-transform transform hover:scale-105 duration-300 ease-in-out" style={{ background: colors.background, borderColor: colors.accent }}>
-              <Users className="w-16 h-16 mb-4" style={{ color: colors.secondary }} />
-              <h3 className="text-xl font-medium mb-3" style={{ color: colors.secondary }}>
+            <div className="p-8 rounded-2xl shadow border text-center flex flex-col items-center transition-transform transform hover:scale-105 duration-300 ease-in-out" style={{ background: 'var(--brand-bg)', borderColor: 'var(--brand-accent)' }}>
+              <Users className="w-16 h-16 mb-4" style={{ color: 'var(--brand-secondary)' }} />
+              <h3 className="text-xl font-medium mb-3" style={{ color: 'var(--brand-secondary)' }}>
                 Customer First
               </h3>
               <p className="text-gray-700">
                 {settings.customerValueText || "Our decisions and actions are driven by what's best for our customers, always striving to exceed their expectations."}
               </p>
             </div>
-            <div className="p-8 rounded-2xl shadow border text-center flex flex-col items-center transition-transform transform hover:scale-105 duration-300 ease-in-out" style={{ background: colors.background, borderColor: colors.accent }}>
-              <Star className="w-16 h-16 mb-4" style={{ color: colors.accent }} />
-              <h3 className="text-xl font-medium mb-3" style={{ color: colors.accent }}>
+            <div className="p-8 rounded-2xl shadow border text-center flex flex-col items-center transition-transform transform hover:scale-105 duration-300 ease-in-out" style={{ background: 'var(--brand-bg)', borderColor: 'var(--brand-accent)' }}>
+              <Star className="w-16 h-16 mb-4" style={{ color: 'var(--brand-accent)' }} />
+              <h3 className="text-xl font-medium mb-3" style={{ color: 'var(--brand-accent)' }}>
                 Excellence
               </h3>
               <p className="text-gray-700">
@@ -108,7 +106,7 @@ const AboutPage = () => {
 
         {/* Milestones */}
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-center mb-8" style={{ color: colors.primary }}>
+          <h2 className="text-3xl font-bold text-center mb-8" style={{ color: 'var(--brand-primary)' }}>
             Our Milestones
           </h2>
           <div className="max-w-4xl mx-auto">
@@ -118,7 +116,7 @@ const AboutPage = () => {
                   <div key={index} className="relative">
                     <div className="absolute w-4 h-4 rounded-full bg-[var(--brand-primary,#2563eb)] -left-2 border border-white"></div>
                     <div className="bg-white p-6 rounded-lg shadow-md border border-slate-100 transition-transform transform hover:translate-x-2 duration-300 ease-in-out">
-                      <h3 className="text-lg font-semibold mb-2" style={{ color: colors.primary }}>{milestone.year}</h3>
+                      <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--brand-primary)' }}>{milestone.year}</h3>
                       <p className="text-gray-700">{milestone.description}</p>
                     </div>
                   </div>
@@ -127,7 +125,7 @@ const AboutPage = () => {
                 <div className="relative">
                    <div className="absolute w-4 h-4 rounded-full bg-[var(--brand-primary,#2563eb)] -left-2 border border-white"></div>
                     <div className="bg-white p-6 rounded-lg shadow-md border border-slate-100">
-                      <h3 className="text-lg font-semibold mb-2" style={{ color: colors.primary }}>2021</h3>
+                      <h3 className="text-lg font-semibold mb-2" style={{ color: 'var(--brand-primary)' }}>2021</h3>
                       <p className="text-gray-700">Started operations and established partnerships with leading brands</p>
                     </div>
                 </div>
@@ -140,7 +138,7 @@ const AboutPage = () => {
         <div>
           <h2
             className="text-3xl font-semibold text-center mb-8"
-            style={{ color: colors.primary }}
+            style={{ color: 'var(--brand-primary)' }}
           >
             Our Leadership Team
           </h2>

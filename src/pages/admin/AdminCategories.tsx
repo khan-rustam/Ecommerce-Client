@@ -13,7 +13,6 @@ import {
   AlertCircle,
 } from "lucide-react";
 import toast from "react-hot-toast";
-import { useBrandColors } from "../../contexts/BrandColorContext";
 import { get, post, put, del, patch } from "../../utils/authFetch"; // Import fetch helpers
 
 interface Category {
@@ -37,7 +36,6 @@ interface Category {
 }
 
 const AdminCategories: React.FC = () => {
-  const { colors } = useBrandColors();
   const user = useSelector((state: any) => state.user.user);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -377,7 +375,7 @@ const AdminCategories: React.FC = () => {
     <div className="p-6 md:p-10 max-w-6xl mx-auto">
       <h1
         className="text-2xl font-semibold mb-6"
-        style={{ color: colors.primary }}
+        style={{ color: 'var(--brand-primary)' }}
       >
         Categories
       </h1>
@@ -401,7 +399,7 @@ const AdminCategories: React.FC = () => {
           <button
             className="flex items-center gap-2 px-4 py-2 rounded bg-[var(--brand-primary)] text-white hover:bg-opacity-80 transition"
             onClick={handleOpenCreateModal}
-            style={{ backgroundColor: colors.primary }}
+            style={{ backgroundColor: 'var(--brand-primary)' }}
           >
             <Plus size={18} />
             Add Category

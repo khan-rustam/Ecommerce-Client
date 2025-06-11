@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Calendar, Eye, Clock, Tag, Search } from "lucide-react";
 import BlogService, { Blog } from "../utils/BlogService";
-import { useBrandColors } from "../contexts/BrandColorContext";
 
 const BlogsPage: React.FC = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -10,7 +9,6 @@ const BlogsPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
-  const { colors } = useBrandColors();
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -67,7 +65,7 @@ const BlogsPage: React.FC = () => {
       <div className="mb-12 text-center">
         <h1
           className="text-3xl md:text-4xl font-bold mb-4"
-          style={{ color: colors.primary }}
+          style={{ color: 'var(--brand-primary)' }}
         >
           Our Blog
         </h1>
@@ -128,7 +126,7 @@ const BlogsPage: React.FC = () => {
             <div className="flex justify-center items-center h-64">
               <div
                 className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2"
-                style={{ borderColor: colors.primary }}
+                style={{ borderColor: 'var(--brand-primary)' }}
               ></div>
             </div>
           ) : error ? (

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Search, User, ShoppingCart, Rss } from 'lucide-react';
+import { Home, Search, User, ShoppingCart, Rss, Heart } from 'lucide-react';
 import { useSelector } from 'react-redux';
 
 const MobileNav: React.FC = () => {
@@ -13,16 +13,16 @@ const MobileNav: React.FC = () => {
   };
 
   return (
-    <div className="md:hidden fixed bottom-3 left-1/2 -translate-x-1/2 bg-background border border-accent/20 rounded-2xl shadow-2xl z-40 w-[98vw] max-w-xl mx-auto">
-      <div className="flex justify-around items-center py-3">
+    <div className="md:hidden fixed bottom-2 left-1/2 -translate-x-1/2 bg-background border border-accent/20 rounded-xl shadow-xl z-40 w-[96vw] max-w-md mx-auto px-1" style={{margin: '0 auto'}}>
+      <div className="flex justify-between items-center py-1">
         <Link 
           to="/" 
-          className={`flex flex-col items-center p-2 ${isActive('/') 
+          className={`flex flex-col items-center p-1.5 ${isActive('/') 
             ? 'text-primary font-bold' 
             : 'text-gray-400 hover:text-accent'}`}
         >
-          <Home size={24} />
-          <span className="text-xs mt-1">Home</span>
+          <Home size={20} />
+          <span className="text-[11px] mt-0.5">Home</span>
         </Link>
         
         <Link 
@@ -36,13 +36,13 @@ const MobileNav: React.FC = () => {
         </Link>
         
         <Link 
-          to="/blogs" 
-          className={`flex flex-col items-center p-2 ${isActive('/blogs') || location.pathname.startsWith('/blog/') 
+          to="/wishlist" 
+          className={`flex flex-col items-center p-2 ${isActive('/wishlist') 
             ? 'text-primary font-bold' 
             : 'text-gray-400 hover:text-accent'}`}
         >
-          <Rss size={24} />
-          <span className="text-xs mt-1">Blogs</span>
+          <Heart size={24} />
+          <span className="text-xs mt-1">Wishlist</span>
         </Link>
         
         <Link 

@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import { Profile } from '../../api';
 import { MapPin, Home, Building, Landmark } from 'lucide-react';
-import { useBrandColors } from '../../contexts/BrandColorContext';
 import AccountLayout from '../../components/layout/AccountLayout';
 
 const emptyAddress = {
@@ -25,7 +24,6 @@ const AddressesPage = () => {
   const [submitting, setSubmitting] = useState(false);
   const [editId, setEditId] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
-  const { colors } = useBrandColors();
 
   const fetchAddresses = async () => {
     if (!token) return;
@@ -147,18 +145,18 @@ const AddressesPage = () => {
   };
 
   const getAddressIcon = (name: string) => {
-    if (/home/i.test(name)) return <Home className="inline mr-1" size={18} style={{ color: colors.primary }} />;
-    if (/office|work/i.test(name)) return <Building className="inline mr-1" size={18} style={{ color: colors.secondary }} />;
-    if (/landmark/i.test(name)) return <Landmark className="inline mr-1" size={18} style={{ color: colors.accent }} />;
-    return <MapPin className="inline mr-1" size={18} style={{ color: colors.text }} />;
+    if (/home/i.test(name)) return <Home className="inline mr-1" size={18} style={{ color: 'var(--brand-primary)' }} />;
+    if (/office|work/i.test(name)) return <Building className="inline mr-1" size={18} style={{ color: 'var(--brand-secondary)' }} />;
+    if (/landmark/i.test(name)) return <Landmark className="inline mr-1" size={18} style={{ color: 'var(--brand-accent)' }} />;
+    return <MapPin className="inline mr-1" size={18} style={{ color: 'var(--brand-text)' }} />;
   };
 
   return (
     <AccountLayout>
-      <h2 className="text-2xl font-bold mb-6" style={{ color: colors.primary }}>Manage Addresses</h2>
+      <h2 className="text-2xl font-bold mb-6" style={{ color: 'var(--brand-primary)' }}>Manage Addresses</h2>
       <button
         className="mb-4 px-4 py-2 rounded shadow transition font-semibold"
-        style={{ background: colors.primary, color: '#fff' }}
+        style={{ background: 'var(--brand-primary)', color: '#fff' }}
         onClick={() => {
           if (!token) {
             toast.error('Please login to add address');
@@ -173,26 +171,26 @@ const AddressesPage = () => {
       </button>
       {loading ? (
         <div className="flex justify-center items-center h-32">
-          <span style={{ color: colors.primary, fontWeight: 600 }}>Loading...</span>
+          <span style={{ color: 'var(--brand-primary)', fontWeight: 600 }}>Loading...</span>
         </div>
       ) : addresses.length === 0 ? (
         <div className="text-gray-500">No addresses found.</div>
       ) : (
         <div className="space-y-4">
           {addresses.map((addr: any) => (
-            <div key={addr._id} className="border rounded-xl p-5 flex justify-between items-center bg-white shadow-md hover:shadow-lg transition-shadow duration-200 group" style={{ borderColor: colors.secondary }}>
+            <div key={addr._id} className="border rounded-xl p-5 flex justify-between items-center bg-white shadow-md hover:shadow-lg transition-shadow duration-200 group" style={{ borderColor: 'var(--brand-secondary)' }}>
               <div>
                 <div className="font-semibold text-lg flex items-center gap-1">
                   {getAddressIcon(addr.name)}
-                  <span style={{ color: colors.text }}>{addr.name}</span>
+                  <span style={{ color: 'var(--brand-text)' }}>{addr.name}</span>
                 </div>
-                <div className="text-sm mt-1" style={{ color: colors.text }}>{addr.addressLine1}</div>
-                <div className="text-sm" style={{ color: colors.text }}>{addr.city}, {addr.country} - {addr.pincode}</div>
-                {addr.landmark && <div className="text-xs" style={{ color: colors.accent }}>Landmark: {addr.landmark}</div>}
-                <div className="text-sm mt-1" style={{ color: colors.text }}>{addr.phone}</div>
+                <div className="text-sm mt-1" style={{ color: 'var(--brand-text)' }}>{addr.addressLine1}</div>
+                <div className="text-sm" style={{ color: 'var(--brand-text)' }}>{addr.city}, {addr.country} - {addr.pincode}</div>
+                {addr.landmark && <div className="text-xs" style={{ color: 'var(--brand-accent)' }}>Landmark: {addr.landmark}</div>}
+                <div className="text-sm mt-1" style={{ color: 'var(--brand-text)' }}>{addr.phone}</div>
               </div>
               <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                <button className="hover:underline font-medium" style={{ color: colors.primary }} onClick={() => handleEdit(addr)}>Edit</button>
+                <button className="hover:underline font-medium" style={{ color: 'var(--brand-primary)' }} onClick={() => handleEdit(addr)}>Edit</button>
                 <button className="hover:underline font-medium" style={{ color: '#dc2626' }} onClick={() => handleDelete(addr._id)}>Delete</button>
               </div>
             </div>
@@ -205,12 +203,12 @@ const AddressesPage = () => {
           <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md relative z-10 animate-fade-in">
             <button
               className="absolute top-2 right-2 text-gray-400 text-xl"
-              style={{ color: colors.primary }}
+              style={{ color: 'var(--brand-primary)' }}
               onClick={() => { setShowModal(false); setEditId(null); }}
             >
               &times;
             </button>
-            <h3 className="text-xl font-bold mb-4 text-center" style={{ color: colors.primary }}>{editId ? 'Edit Address' : 'Add Address'}</h3>
+            <h3 className="text-xl font-bold mb-4 text-center" style={{ color: 'var(--brand-primary)' }}>{editId ? 'Edit Address' : 'Add Address'}</h3>
             <div className="space-y-3">
               <input className="w-full border rounded px-3 py-2" placeholder="Name (e.g. Home, Office)" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
               <input className="w-full border rounded px-3 py-2" placeholder="Address Line 1" value={form.addressLine1} onChange={e => setForm(f => ({ ...f, addressLine1: e.target.value }))} />
@@ -221,7 +219,7 @@ const AddressesPage = () => {
               <input className="w-full border rounded px-3 py-2" placeholder="Phone" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))} />
               <button
                 className="w-full py-2 rounded font-semibold mt-2 transition"
-                style={{ background: colors.primary, color: '#fff' }}
+                style={{ background: 'var(--brand-primary)', color: '#fff' }}
                 onClick={handleAddOrEdit}
                 disabled={submitting}
               >
@@ -235,12 +233,12 @@ const AddressesPage = () => {
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
           <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-sm relative z-10 animate-fade-in flex flex-col items-center">
-            <h3 className="text-xl font-bold mb-4 text-center" style={{ color: colors.primary }}>Delete Address</h3>
-            <p className="mb-6 text-center" style={{ color: colors.text }}>Are you sure you want to delete this address? This action cannot be undone.</p>
+            <h3 className="text-xl font-bold mb-4 text-center" style={{ color: 'var(--brand-primary)' }}>Delete Address</h3>
+            <p className="mb-6 text-center" style={{ color: 'var(--brand-text)' }}>Are you sure you want to delete this address? This action cannot be undone.</p>
             <div className="flex gap-4 w-full justify-center">
               <button
                 className="px-6 py-2 rounded-lg font-semibold shadow"
-                style={{ background: colors.secondary, color: colors.text }}
+                style={{ background: 'var(--brand-secondary)', color: 'var(--brand-text)' }}
                 onClick={() => setDeleteId(null)}
               >
                 Cancel

@@ -5,7 +5,6 @@ import { clearUser, setUser } from "../../store/userSlice";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { Profile } from "../../api";
-import { useBrandColors } from "../../contexts/BrandColorContext";
 import AccountLayout from "../../components/layout/AccountLayout";
 
 const ProfilePage = () => {
@@ -32,7 +31,6 @@ const ProfilePage = () => {
   });
   const [profileUpdating, setProfileUpdating] = useState(false);
   const [avatarUploading, setAvatarUploading] = useState(false);
-  const { colors } = useBrandColors();
   const user = useSelector((state: any) => state.user.user);
 
   const dispatch = useDispatch();
@@ -206,7 +204,7 @@ const ProfilePage = () => {
       <div className="relative animate-fade-in">
         <h2
           className="text-2xl font-bold mb-8 tracking-tight"
-          style={{ color: colors.primary }}
+          style={{ color: 'var(--brand-primary)' }}
         >
           Profile Settings
         </h2>
@@ -214,7 +212,7 @@ const ProfilePage = () => {
           <div className="flex justify-center items-center h-40">
             <Loader2
               className="h-10 w-10 animate-spin"
-              style={{ color: colors.primary }}
+              style={{ color: 'var(--brand-primary)' }}
             />
           </div>
         ) : (
@@ -224,12 +222,12 @@ const ProfilePage = () => {
                 src={avatar}
                 alt="avatar"
                 className="w-24 h-24 rounded-full border-4 shadow-md object-cover"
-                style={{ borderColor: colors.secondary, background: "#fff" }}
+                style={{ borderColor: 'var(--brand-secondary)', background: "#fff" }}
               />
               <div className="flex flex-col items-center md:items-start">
                 <label
                   className="text-sm hover:underline font-medium cursor-pointer"
-                  style={{ color: colors.primary }}
+                  style={{ color: 'var(--brand-primary)' }}
                 >
                   {avatarUploading ? 'Uploading...' : 'Change Avatar'}
                   <input
@@ -240,7 +238,7 @@ const ProfilePage = () => {
                     disabled={avatarUploading}
                   />
                 </label>
-                <span className="text-xs mt-1" style={{ color: colors.text }}>
+                <span className="text-xs mt-1" style={{ color: 'var(--brand-text)' }}>
                   JPG, PNG, max 2MB
                 </span>
               </div>
@@ -250,7 +248,7 @@ const ProfilePage = () => {
               <div className="mb-4">
                 <label
                   className="block text-sm font-semibold mb-2"
-                  style={{ color: colors.text }}
+                  style={{ color: 'var(--brand-text)' }}
                 >
                   Username
                 </label>
@@ -261,10 +259,10 @@ const ProfilePage = () => {
                   className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 text-base"
                   style={{
                     background: "#fff",
-                    color: colors.text,
-                    borderColor: colors.secondary,
+                    color: 'var(--brand-text)',
+                    borderColor: 'var(--brand-secondary)',
                     ...({
-                      ["--tw-ring-color"]: colors.primary,
+                      ["--tw-ring-color"]: 'var(--brand-primary)',
                     } as React.CSSProperties),
                   }}
                   disabled={!editing}
@@ -273,7 +271,7 @@ const ProfilePage = () => {
               <div className="mb-4">
                 <label
                   className="block text-sm font-semibold mb-2"
-                  style={{ color: colors.text }}
+                  style={{ color: 'var(--brand-text)' }}
                 >
                   Email
                 </label>
@@ -284,10 +282,10 @@ const ProfilePage = () => {
                   className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 text-base"
                   style={{
                     background: "#fff",
-                    color: colors.text,
-                    borderColor: colors.secondary,
+                    color: 'var(--brand-text)',
+                    borderColor: 'var(--brand-secondary)',
                     ...({
-                      ["--tw-ring-color"]: colors.primary,
+                      ["--tw-ring-color"]: 'var(--brand-primary)',
                     } as React.CSSProperties),
                   }}
                   disabled={!editing}
@@ -298,7 +296,7 @@ const ProfilePage = () => {
               <div className="mb-4">
                 <label
                   className="block text-sm font-semibold mb-2"
-                  style={{ color: colors.text }}
+                  style={{ color: 'var(--brand-text)' }}
                 >
                   Phone
                 </label>
@@ -309,10 +307,10 @@ const ProfilePage = () => {
                   className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 text-base"
                   style={{
                     background: "#fff",
-                    color: colors.text,
-                    borderColor: colors.secondary,
+                    color: 'var(--brand-text)',
+                    borderColor: 'var(--brand-secondary)',
                     ...({
-                      ["--tw-ring-color"]: colors.primary,
+                      ["--tw-ring-color"]: 'var(--brand-primary)',
                     } as React.CSSProperties),
                   }}
                   disabled={!editing}
@@ -325,7 +323,7 @@ const ProfilePage = () => {
                   <div className="mb-4">
                     <label
                       className="block text-sm font-semibold mb-2"
-                      style={{ color: colors.text }}
+                      style={{ color: 'var(--brand-text)' }}
                     >
                       Password
                     </label>
@@ -336,10 +334,10 @@ const ProfilePage = () => {
                       className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 text-base"
                       style={{
                         background: "#fff",
-                        color: colors.text,
-                        borderColor: colors.secondary,
+                        color: 'var(--brand-text)',
+                        borderColor: 'var(--brand-secondary)',
                         ...({
-                          ["--tw-ring-color"]: colors.primary,
+                          ["--tw-ring-color"]: 'var(--brand-primary)',
                         } as React.CSSProperties),
                       }}
                       placeholder="Leave blank to keep current password"
@@ -348,7 +346,7 @@ const ProfilePage = () => {
                   <div className="mb-4">
                     <label
                       className="block text-sm font-semibold mb-2"
-                      style={{ color: colors.text }}
+                      style={{ color: 'var(--brand-text)' }}
                     >
                       Confirm Password
                     </label>
@@ -359,10 +357,10 @@ const ProfilePage = () => {
                       className="w-full border rounded-lg px-4 py-3 focus:outline-none focus:ring-2 text-base"
                       style={{
                         background: "#fff",
-                        color: colors.text,
-                        borderColor: colors.secondary,
+                        color: 'var(--brand-text)',
+                        borderColor: 'var(--brand-secondary)',
                         ...({
-                          ["--tw-ring-color"]: colors.primary,
+                          ["--tw-ring-color"]: 'var(--brand-primary)',
                         } as React.CSSProperties),
                       }}
                       placeholder="Confirm new password"
@@ -378,7 +376,7 @@ const ProfilePage = () => {
                       type="button"
                       className="px-6 py-3 rounded-lg font-semibold shadow transition-colors"
                       style={{
-                        backgroundColor: colors.primary,
+                        backgroundColor: 'var(--brand-primary)',
                         color: "#fff",
                       }}
                       onClick={handleSave}
@@ -389,8 +387,8 @@ const ProfilePage = () => {
                       type="button"
                       className="px-6 py-3 rounded-lg font-semibold shadow transition-colors"
                       style={{
-                        backgroundColor: colors.secondary,
-                        color: colors.text,
+                        backgroundColor: 'var(--brand-secondary)',
+                        color: 'var(--brand-text)',
                       }}
                       onClick={() => {
                         setEditing(false);
@@ -405,7 +403,7 @@ const ProfilePage = () => {
                     type="button"
                     className="px-6 py-3 rounded-lg font-semibold shadow transition-colors"
                     style={{
-                      backgroundColor: colors.primary,
+                      backgroundColor: 'var(--brand-primary)',
                       color: "#fff",
                     }}
                     onClick={() => setEditing(true)}
@@ -420,7 +418,7 @@ const ProfilePage = () => {
             {showOtpModal && (
               <div className="fixed inset-0 z-50 flex items-center justify-center">
                 <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" />
-                <div className="rounded-xl shadow-xl p-8 w-full max-w-md relative z-10" style={{ background: colors.accent || "#fff" }}>
+                <div className="rounded-xl shadow-xl p-8 w-full max-w-md relative z-10" style={{ background: 'var(--brand-accent)' }}>
                   <button
                     className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-xl"
                     style={{ cursor: 'pointer' }}
@@ -432,17 +430,17 @@ const ProfilePage = () => {
                   >
                     &times;
                   </button>
-                  <h3 className="text-xl font-bold mb-4 text-center" style={{ color: colors.primary }}>
+                  <h3 className="text-xl font-bold mb-4 text-center" style={{ color: 'var(--brand-primary)' }}>
                     Verify OTP
                   </h3>
-                  <label className="block text-sm font-medium mb-2" style={{ color: colors.text }}>
+                  <label className="block text-sm font-medium mb-2" style={{ color: 'var(--brand-text)' }}>
                     Enter OTP sent to your email
                   </label>
                   
                   {(otpLoading || profileUpdating) ? (
                     <div className="flex flex-col items-center justify-center py-6">
-                      <Loader2 className="h-8 w-8 animate-spin mb-2" style={{ color: colors.primary }} />
-                      <span className="font-medium" style={{ color: colors.primary }}>
+                      <Loader2 className="h-8 w-8 animate-spin mb-2" style={{ color: 'var(--brand-primary)' }} />
+                      <span className="font-medium" style={{ color: 'var(--brand-primary)' }}>
                         {otpLoading && !profileUpdating
                           ? "Sending OTP to your email..."
                           : "Saving your changes..."}
@@ -465,9 +463,9 @@ const ProfilePage = () => {
                             className="w-10 h-12 text-center border rounded text-lg font-bold focus:ring-2 focus:border-2"
                             style={{
                               background: '#fff',
-                              color: colors.text,
-                              borderColor: colors.secondary,
-                              ...( { ['--tw-ring-color']: colors.primary } as React.CSSProperties )
+                              color: 'var(--brand-text)',
+                              borderColor: 'var(--brand-secondary)',
+                              ...( { ['--tw-ring-color']: 'var(--brand-primary)' } as React.CSSProperties )
                             }}
                             autoFocus={idx === 0}
                           />
@@ -476,7 +474,7 @@ const ProfilePage = () => {
                       <button
                         onClick={handleOtpConfirm}
                         className="w-full py-3 rounded-lg font-semibold mt-4"
-                        style={{ backgroundColor: colors.primary, color: '#fff' }}
+                        style={{ backgroundColor: 'var(--brand-primary)', color: '#fff' }}
                         disabled={otp.length !== 6}
                       >
                         Verify & Update

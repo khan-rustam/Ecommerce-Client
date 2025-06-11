@@ -1,13 +1,10 @@
 import React from 'react';
-import { useBrandColors } from '../contexts/BrandColorContext';
 
 const TermsAndAgreementPage: React.FC = () => {
-  const { colors } = useBrandColors();
-
   return (
     <div
       className="container mx-auto px-4 py-12 min-h-screen"
-      style={{ background: colors.background, color: colors.text }}
+      style={{ background: 'var(--brand-bg)', color: 'var(--brand-text)' }}
     >
       <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">Terms and Agreement</h1>
 

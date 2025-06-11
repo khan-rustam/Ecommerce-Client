@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import { useBrandColors } from '../contexts/BrandColorContext';
 
 interface FAQItem {
   question: string;
@@ -76,7 +75,6 @@ const faqData: FAQCategory[] = [
 ];
 
 const FAQPage = () => {
-  const { colors } = useBrandColors();
   const [openItems, setOpenItems] = useState<Record<string, boolean>>({});
 
   const toggleItem = (categoryIndex: number, itemIndex: number) => {
@@ -85,7 +83,7 @@ const FAQPage = () => {
   };
 
   return (
-    <div style={{ background: colors.background, color: colors.text }} className="container mx-auto px-4 py-12">
+    <div style={{ background: 'var(--brand-bg)', color: 'var(--brand-text)' }} className="container mx-auto px-4 py-12">
       <h1 className="text-3xl font-bold text-center mb-8">Frequently Asked Questions</h1>
       
       <div className="max-w-3xl mx-auto">
@@ -126,13 +124,13 @@ const FAQPage = () => {
 
       {/* Still Have Questions */}
       <div className="mt-12 text-center">
-        <h2 className="text-xl font-semibold mb-4" style={{ color: colors.primary }}>Still Have Questions?</h2>
-        <p className="mb-6" style={{ color: colors.text }}>
+        <h2 className="text-xl font-semibold mb-4" style={{ color: 'var(--brand-primary)' }}>Still Have Questions?</h2>
+        <p className="mb-6" style={{ color: 'var(--brand-text)' }}>
           Can't find the answer you're looking for? Please chat to our friendly team.
         </p>
         <a
           href="/contact"
-          style={{ background: colors.primary, color: '#fff' }}
+          style={{ background: 'var(--brand-primary)', color: '#fff' }}
           className="inline-block font-medium py-2 px-6 rounded-md transition-colors"
         >
           Contact Us

@@ -19,7 +19,6 @@ import {
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import BlogService, { Blog } from '../../utils/BlogService';
-import { useBrandColors } from '../../contexts/BrandColorContext';
 
 const AdminBlogs: React.FC = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -27,7 +26,6 @@ const AdminBlogs: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState<'all' | 'published' | 'draft'>('all');
-  const { colors } = useBrandColors();
   const user = useSelector((state: any) => state.user.user);
   const navigate = useNavigate();
 
@@ -115,7 +113,7 @@ const AdminBlogs: React.FC = () => {
     <div className="p-6 md:p-10">
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-          <h1 className="text-2xl font-bold" style={{ color: colors.primary }}>
+          <h1 className="text-2xl font-bold" style={{ color: 'var(--brand-primary)' }}>
             Manage Blogs
           </h1>
           
@@ -161,7 +159,7 @@ const AdminBlogs: React.FC = () => {
         {loading ? (
           <div className="bg-white rounded-xl shadow-sm p-16 text-center">
             <div className="flex flex-col items-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2" style={{ borderColor: colors.primary }}></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2" style={{ borderColor: 'var(--brand-primary)' }}></div>
               <p className="mt-4 text-gray-500">Loading blogs...</p>
             </div>
           </div>

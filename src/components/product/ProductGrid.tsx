@@ -1,7 +1,6 @@
 import React from "react";
 import ProductCard from "./ProductCard";
 import { Product, BackendProduct } from "../../types";
-import { useBrandColors } from "../../contexts/BrandColorContext";
 
 interface ProductGridProps {
   products: (Product | BackendProduct)[];
@@ -18,7 +17,6 @@ const ProductGrid: React.FC<ProductGridProps> = ({
   loading = false,
   emptyMessage = "No products available",
 }) => {
-  const { colors } = useBrandColors();
   const getGridCols = () => {
     switch (cols) {
       case 2:
@@ -60,12 +58,10 @@ const ProductGrid: React.FC<ProductGridProps> = ({
         <div className="text-center mb-8">
           <h2
             className="text-2xl font-semibold inline-block relative"
-            style={{ color: colors.primary }}
           >
             {title}
             <span
               className="absolute bottom-0 left-1/2 w-16 h-0.5 transform -translate-x-1/2"
-              style={{ background: colors.primary }}
             ></span>
           </h2>
         </div>

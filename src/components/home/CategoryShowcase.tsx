@@ -92,36 +92,35 @@ const CategoryShowcase: React.FC<CategoryShowcaseProps> = ({
   }
 
   return (
-    <section className="py-16 px-4 bg-background">
+    <section className="py-20 px-4 bg-background font-sans" style={{fontFamily:'Inter, Poppins, sans-serif'}}>
       <div className="container mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-extrabold inline-block relative text-primary tracking-tight drop-shadow-lg">
+        <div className="text-center mb-14">
+          <h2 className="text-4xl md:text-5xl font-extrabold inline-block relative text-primary tracking-tight drop-shadow-lg mb-2">
             {title}
-            <span className="absolute bottom-0 left-1/2 w-20 h-1 bg-accent rounded-full transform -translate-x-1/2"></span>
+            <span className="block mx-auto mt-2 w-24 h-1 bg-gradient-to-r from-accent to-primary rounded-full"></span>
           </h2>
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
           {displayCategories.map((category) => (
             <Link
               to={`/category/${category.slug}`}
               key={getCategoryKey(category)}
               className="group"
             >
-              <div className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 border-2 border-transparent group-hover:border-accent">
-                <div className="relative aspect-square overflow-hidden">
+              <div className="bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-shadow duration-300 border-2 border-transparent group-hover:border-accent relative flex flex-col items-center p-6 cursor-pointer hover:scale-105 hover:-translate-y-1 transition-all">
+                <div className="relative w-28 h-28 mb-5">
                   <img
                     src={category.image}
                     alt={category.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="w-full h-full object-cover rounded-2xl group-hover:scale-110 transition-transform duration-700 border-4 border-white shadow-lg"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = 'https://placehold.co/300x300?text=Image+Not+Found';
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-80 transition-opacity duration-300"></div>
                 </div>
-                <div className="py-5 px-3 text-center bg-background group-hover:bg-primary group-hover:text-white transition-colors duration-300 rounded-b-2xl">
-                  <h3 className="font-bold text-lg md:text-xl tracking-wide">{category.name}</h3>
+                <div className="text-center">
+                  <h3 className="font-bold text-xl md:text-2xl tracking-wide text-gray-900 group-hover:text-primary transition-colors duration-300 mb-1">{category.name}</h3>
                 </div>
               </div>
             </Link>

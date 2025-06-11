@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import { useBrandColors } from '../../contexts/BrandColorContext';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { Check, Trash2, Star, Store } from 'lucide-react';
 import { get, patch, del } from "../../utils/authFetch";
 
+type Review = {
+  _id: string;
+  product: string | { name: string };
+  userName: string;
+  comment: string;
+  rating: number;
+  status: 'approved' | 'pending' | 'rejected';
+  isCustomStore: boolean;
+  createdAt: string;
+  [key: string]: any;
+};
+
 const AdminReviews = () => {
-  const { colors } = useBrandColors();
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -31,7 +41,7 @@ const AdminReviews = () => {
 
   const handleApprove = async (id: string) => {
     try {
-      await patch(`/reviews/${id}/approve`);
+      await patch(`/reviews/${id}/approve`, {});
       toast.success('Review approved');
       setReviews(reviews => reviews.map(r => r._id === id ? { ...r, status: 'approved' } : r));
     } catch {
@@ -71,21 +81,21 @@ const AdminReviews = () => {
   });
 
   return (
-    <div className="min-h-screen py-10 px-2 md:px-8 flex flex-col items-center" style={{ background: colors.background }}>
+    <div className="min-h-screen py-10 px-2 md:px-8 flex flex-col items-center" style={{ background: 'var(--brand-bg)' }}>
       {/* Breadcrumbs */}
       <nav className="flex items-center gap-2 text-sm mb-2 w-full max-w-5xl" aria-label="Breadcrumbs">
-        <button onClick={() => navigate('/admin')} className="hover:underline font-medium" style={{ color: colors.primary, background: 'transparent' }}>Dashboard</button>
+        <button onClick={() => navigate('/admin')} className="hover:underline font-medium" style={{ color: 'var(--brand-primary)', background: 'transparent' }}>Dashboard</button>
         <span className="mx-1 text-gray-400">/</span>
-        <span className="font-semibold" style={{ color: colors.text }}>Reviews</span>
+        <span className="font-semibold" style={{ color: 'var(--brand-text)' }}>Reviews</span>
       </nav>
       <div className="w-full max-w-5xl bg-white rounded-2xl shadow-xl p-8 animate-fade-in">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-          <h1 className="text-3xl font-bold tracking-tight" style={{ color: colors.primary }}>Manage Reviews</h1>
+          <h1 className="text-3xl font-bold tracking-tight" style={{ color: 'var(--brand-primary)' }}>Manage Reviews</h1>
         </div>
         <div className="mb-6 flex items-center gap-2">
           <input
             className="w-full max-w-md px-4 py-2 rounded-lg shadow-sm border focus:ring-2 focus:ring-[var(--brand-accent)] focus:outline-none transition"
-            style={{ background: colors.accent, color: colors.text, borderColor: colors.primary }}
+            style={{ background: 'var(--brand-accent)', color: 'var(--brand-text)', borderColor: 'var(--brand-primary)' }}
             placeholder="Search or filter reviews..."
             value={search}
             onChange={e => setSearch(e.target.value)}

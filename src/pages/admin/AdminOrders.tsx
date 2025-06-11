@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { useBrandColors } from "../../contexts/BrandColorContext";
 import { ShoppingCart } from "lucide-react";
 
 const initialOrders: any[] = [];
 
 const AdminOrders = () => {
-  const { colors } = useBrandColors();
   const [orders] = useState(initialOrders);
   const [search, setSearch] = useState("");
 
@@ -14,9 +12,9 @@ const AdminOrders = () => {
   );
 
   return (
-    <div className="min-h-screen py-10 px-2 md:px-8 flex flex-col items-center" style={{ background: colors.background }}>
+    <div className="min-h-screen py-10 px-2 md:px-8 flex flex-col items-center" style={{ background: 'var(--brand-bg)' }}>
       <div className="w-full max-w-6xl bg-white rounded-2xl shadow-xl p-8 animate-fade-in">
-        <h1 className="text-2xl font-bold mb-6" style={{ color: colors.primary }}> All Orders</h1>
+        <h1 className="text-2xl font-bold mb-6" style={{ color: 'var(--brand-primary)' }}> All Orders</h1>
         <div className="bg-gray-50 rounded-xl border border-gray-100 p-4 mb-2">
           <input
             type="text"

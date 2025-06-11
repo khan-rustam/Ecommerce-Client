@@ -6,13 +6,22 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import toast from 'react-hot-toast';
 import BlogService from '../../../utils/BlogService';
-import { useBrandColors } from '../../../contexts/BrandColorContext';
 
-const CreateBlog: React.FC = () => {
+const CreateBlog: React.FC<{}> = () => {
   const user = useSelector((state: any) => state.user.user);
   const navigate = useNavigate();
-  const { colors } = useBrandColors();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [redirecting, setRedirecting] = useState(false);
+
+  // Redirect if not authenticated
+  React.useEffect(() => {
+    if (!user) {
+      setRedirecting(true);
+      navigate('/auth/login');
+    }
+  }, [user, navigate]);
+
+  if (!user || redirecting) return null;
 
   // Form state
   const [title, setTitle] = useState('');
@@ -28,11 +37,6 @@ const CreateBlog: React.FC = () => {
     content: '',
     image: ''
   });
-
-  // Check if user is authenticated
-  if (!user) {
-    return navigate('/auth/login');
-  }
 
   // Handle image selection
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -191,7 +195,7 @@ const CreateBlog: React.FC = () => {
             <ArrowLeft size={18} />
             Back to Blogs
           </button>
-          <h1 className="text-2xl md:text-3xl font-bold" style={{ color: colors.primary }}>
+          <h1 className="text-2xl md:text-3xl font-bold" style={{ color: 'var(--brand-primary)' }}>
             Create New Blog
           </h1>
         </div>

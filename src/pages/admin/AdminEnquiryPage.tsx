@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useBrandColors } from '../../contexts/BrandColorContext';
 import { Send } from 'lucide-react';
-import toast from 'react-hot-toast';
+import toast from 'react-hot-toast';  
+// @ts-expect-error: no type declaration for ProductModal
 import ProductModal from '../../components/ProductManager/ProductModal';
 
 interface Enquiry {
@@ -14,8 +14,19 @@ interface Enquiry {
   response?: string;
 }
 
+type Review = {
+  _id: string;
+  product: string | { name: string };
+  userName: string;
+  comment: string;
+  rating: number;
+  status: 'approved' | 'pending' | 'rejected';
+  isCustomStore: boolean;
+  createdAt: string;
+  [key: string]: any;
+};
+
 const AdminEnquiryPage: React.FC = () => {
-  const { colors } = useBrandColors();
   const [enquiries, setEnquiries] = useState<Enquiry[]>([]);
   const [loading, setLoading] = useState(true);
   const [responseLoading, setResponseLoading] = useState<string | null>(null); // Stores the ID of the enquiry being responded to
@@ -116,9 +127,9 @@ const AdminEnquiryPage: React.FC = () => {
   return (
     <div
       className="container mx-auto px-4 py-12 min-h-screen"
-      style={{ background: colors.background, color: colors.text }}
+      style={{ background: 'var(--brand-bg)', color: 'var(--brand-text)' }}
     >
-      <h1 className="text-4xl font-bold text-center mb-8" style={{ color: colors.primary }}>Admin Enquiries</h1>
+      <h1 className="text-4xl font-bold text-center mb-8" style={{ color: 'var(--brand-primary)' }}>Admin Enquiries</h1>
 
       {loading ? (
         <div className="text-center text-gray-600">Loading enquiries...</div>

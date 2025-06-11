@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 import { Plus, Image as ImageIcon, Edit, Trash2, UploadCloud, X, Loader2, Search, AlertCircle, Calendar, Link2 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { useBrandColors } from '../../contexts/BrandColorContext';
 import { get, post, put, del, patch } from '../../utils/authFetch'; // Import fetch helpers
 
 interface SmartBanner {
@@ -35,7 +34,6 @@ type SmartBannerForm = {
 };
 
 const AdminSmartBanners: React.FC = () => {
-  const { colors } = useBrandColors();
   const user = useSelector((state: any) => state.user.user);
   const [banners, setBanners] = useState<SmartBanner[]>([]);
   const [loading, setLoading] = useState(true);
@@ -311,7 +309,7 @@ const AdminSmartBanners: React.FC = () => {
 
   return (
     <div className="p-6 md:p-10 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-semibold mb-6" style={{ color: colors.primary }}>Smart Banners</h1>
+      <h1 className="text-2xl font-semibold mb-6" style={{ color: 'var(--brand-primary)' }}>Smart Banners</h1>
       
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">

@@ -6,7 +6,6 @@ import toast from "react-hot-toast";
 import { Register, Login } from "../../api";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../store/userSlice";
-import { useBrandColors } from "../../contexts/BrandColorContext";
 
 const RegisterPage = () => {
   const [username, setUsername] = useState("");
@@ -19,7 +18,6 @@ const RegisterPage = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { colors } = useBrandColors();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -75,10 +73,10 @@ const RegisterPage = () => {
         className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-xl"
       >
         <div className="text-center">
-          <h2 className="text-3xl font-bold" style={{ color: colors.primary }}>
+          <h2 className="text-3xl font-bold">
             Create your account
           </h2>
-          <p className="mt-2 text-sm" style={{ color: colors.text }}>
+          <p className="mt-2 text-sm">
             Join us and start shopping today
           </p>
         </div>
@@ -217,12 +215,11 @@ const RegisterPage = () => {
               required
               className="h-4 w-4 focus:ring-2 focus:ring-[var(--brand-primary)] border-gray-300 rounded"
             />
-            <label htmlFor="terms" className="ml-2 block text-sm" style={{ color: colors.text }}>
+            <label htmlFor="terms" className="ml-2 block text-sm">
               I agree to the{" "}
               <Link
                 to="/terms"
                 className="font-medium hover:underline transition-colors"
-                style={{ color: colors.primary }}
               >
                 Terms of Service
               </Link>{" "}
@@ -230,7 +227,6 @@ const RegisterPage = () => {
               <Link
                 to="/privacy"
                 className="font-medium hover:underline transition-colors"
-                style={{ color: colors.primary }}
               >
                 Privacy Policy
               </Link>
@@ -244,7 +240,7 @@ const RegisterPage = () => {
               type="submit"
               disabled={loading}
               className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              style={{ backgroundColor: colors.primary }}
+              style={{ backgroundColor: 'var(--brand-primary)' }}
             >
               {loading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -264,7 +260,6 @@ const RegisterPage = () => {
             <Link
               to="/auth/login"
               className="font-medium hover:underline transition-colors"
-              style={{ color: colors.primary }}
             >
               Sign in
             </Link>

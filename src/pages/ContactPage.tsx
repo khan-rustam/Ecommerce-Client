@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import toast from "react-hot-toast";
-import { useBrandColors } from "../contexts/BrandColorContext";
 import { useSettings } from "../contexts/SettingsContext";
 
 const ContactPage = () => {
-  const { colors } = useBrandColors();
   const { settings } = useSettings();
   const [formData, setFormData] = useState({
     name: "",
@@ -53,7 +51,7 @@ const ContactPage = () => {
 
   return (
     <div
-      style={{ background: colors.background, color: colors.text }}
+      style={{ background: 'var(--brand-bg)', color: 'var(--brand-text)' }}
       className="container mx-auto px-4 py-12"
     >
       <div className="max-w-3xl mx-auto flex flex-col items-center mb-10">
@@ -73,7 +71,7 @@ const ContactPage = () => {
         )} */}
         <h1
           className="text-3xl md:text-4xl font-bold text-center mb-2"
-          style={{ color: colors.primary }}
+          style={{ color: 'var(--brand-primary)' }}
         >
           Reach Out to Us!
         </h1>
@@ -87,14 +85,14 @@ const ContactPage = () => {
           <div className="bg-white p-6 rounded-xl shadow flex flex-col gap-6 border border-slate-100">
             <h2
               className="text-xl font-semibold mb-2"
-              style={{ color: colors.primary }}
+              style={{ color: 'var(--brand-primary)' }}
             >
               Get in Touch
             </h2>
             <div className="space-y-4">
               {settings.email && (
                 <div className="flex items-center gap-3">
-                  <Mail className="w-6 h-6" style={{ color: colors.primary }} />
+                  <Mail className="w-6 h-6" style={{ color: 'var(--brand-primary)' }} />
                   <span className="font-medium">
                     <a href={`mailto:${settings.email}`}>{settings.email}</a>
                   </span>
@@ -104,7 +102,7 @@ const ContactPage = () => {
                 <div className="flex items-center gap-3">
                   <Phone
                     className="w-6 h-6"
-                    style={{ color: colors.primary }}
+                    style={{ color: 'var(--brand-primary)' }}
                   />
                   <span className="font-medium">
                     <a href={`tel:${settings.phone}`}>{settings.phone}</a>
@@ -115,7 +113,7 @@ const ContactPage = () => {
                 <div className="flex items-center gap-3">
                   <MapPin
                     className="w-6 h-6"
-                    style={{ color: colors.primary }}
+                    style={{ color: 'var(--brand-primary)' }}
                   />
                   <span className="font-medium">{settings.address}</span>
                 </div>
@@ -218,7 +216,7 @@ const ContactPage = () => {
           <div className="bg-white p-8 rounded-xl shadow border border-slate-100">
             <h2
               className="text-xl font-semibold mb-6"
-              style={{ color: colors.primary }}
+              style={{ color: 'var(--brand-primary)' }}
             >
               Send us a Message
             </h2>
@@ -279,7 +277,7 @@ const ContactPage = () => {
               </div>
               <button
                 type="submit"
-                style={{ backgroundColor: colors.primary }}
+                style={{ backgroundColor: 'var(--brand-primary)' }}
                 className="mt-6 w-full flex items-center justify-center py-3 px-6 border border-transparent rounded-md shadow-sm text-base font-medium text-white hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition duration-200 ease-in-out"
                 disabled={loading}
               >

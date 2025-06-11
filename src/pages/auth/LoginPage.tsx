@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../store/userSlice";
 import { Login, UserLogin } from "../../api";
-import { useBrandColors } from "../../contexts/BrandColorContext";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -28,7 +27,6 @@ const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { colors } = useBrandColors();
 
   useEffect(() => {
     const savedEmail = localStorage.getItem("rememberedEmail");
@@ -68,7 +66,7 @@ const LoginPage = () => {
     setForgotLoading(true);
     try {
       // Send OTP to email
-      const res = await fetch("http://localhost:5000/api/auth/request-otp", {
+      const res = await fetch("http://localhost:9000/api/auth/request-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: forgotEmail, updateData: {} }),
@@ -173,10 +171,10 @@ const LoginPage = () => {
               className="h-12 transition-transform hover:scale-105"
             />
           </Link> */}
-          <h2 className="text-3xl font-bold" style={{ color: colors.primary }}>
+          <h2 className="text-3xl font-bold" style={{ color: 'var(--brand-primary)' }}>
             Welcome back
           </h2>
-          <p className="mt-2 text-sm" style={{ color: colors.text }}>
+          <p className="mt-2 text-sm" style={{ color: 'var(--brand-text)' }}>
             Sign in to your account to continue
           </p>
         </div>
@@ -261,7 +259,7 @@ const LoginPage = () => {
               <button
                 type="button"
                 className="font-medium"
-                style={{ color: colors.primary }}
+                style={{ color: 'var(--brand-primary)' }}
                 onClick={() => setShowForgot(true)}
               >
                 Forgot your password?
@@ -276,7 +274,7 @@ const LoginPage = () => {
               type="submit"
               disabled={loading}
               className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              style={{ backgroundColor: colors.primary }}
+              style={{ backgroundColor: 'var(--brand-primary)' }}
             >
               {loading ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -296,7 +294,7 @@ const LoginPage = () => {
             <Link
               to="/auth/register"
               className="font-medium hover:underline transition-colors"
-              style={{ color: colors.primary }}
+              style={{ color: 'var(--brand-primary)' }}
             >
               Sign up
             </Link>
@@ -325,7 +323,7 @@ const LoginPage = () => {
             </button>
             <h3
               className="text-xl font-bold mb-4 text-center"
-              style={{ color: colors.primary }}
+              style={{ color: 'var(--brand-primary)' }}
             >
               Reset Password
             </h3>
@@ -343,7 +341,7 @@ const LoginPage = () => {
                 />
                 <button
                   className="w-full"
-                  style={{ background: colors.primary, color: "#fff" }}
+                  style={{ background: 'var(--brand-primary)', color: '#fff' }}
                   onClick={handleForgotPassword}
                   disabled={forgotLoading}
                 >
@@ -372,7 +370,7 @@ const LoginPage = () => {
                 </div>
                 <button
                   className="w-full"
-                  style={{ background: colors.primary, color: "#fff" }}
+                  style={{ background: 'var(--brand-primary)', color: '#fff' }}
                   onClick={handleForgotReset}
                   disabled={forgotLoading}
                 >
@@ -435,7 +433,7 @@ const LoginPage = () => {
                 </div>
                 <button
                   className="w-full"
-                  style={{ background: colors.primary, color: "#fff" }}
+                  style={{ background: 'var(--brand-primary)', color: '#fff' }}
                   onClick={handleForgotReset}
                   disabled={forgotLoading}
                 >

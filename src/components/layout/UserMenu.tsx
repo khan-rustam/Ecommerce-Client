@@ -46,6 +46,11 @@ const UserMenu: React.FC<UserMenuProps> = ({ onClose, hideUserInfo }) => {
     }, 100);
   };
 
+  const handleNavigate = (path: string) => () => {
+    onClose();
+    setTimeout(() => navigate(path), 50);
+  };
+
   if (!user) {
     return null;
   }
@@ -78,26 +83,26 @@ const UserMenu: React.FC<UserMenuProps> = ({ onClose, hideUserInfo }) => {
           </div>
         )}
         <div className="py-2">
-          <Link
-            to="/account/profile"
+          <button
+            type="button"
+            onClick={handleNavigate('/account/profile')}
             className="flex items-center px-6 py-3 text-base text-gray-700 hover:bg-gray-100"
-            onClick={onClose}
           >
             <User className="mr-3 h-5 w-5" />
             Profile Settings
-          </Link>
-          <Link
-            to="/account/orders"
+          </button>
+          <button
+            type="button"
+            onClick={handleNavigate('/account/orders')}
             className="flex items-center px-6 py-3 text-base text-gray-700 hover:bg-gray-100"
-            onClick={onClose}
           >
             <ShoppingBag className="mr-3 h-5 w-5" />
             My Orders
-          </Link>
-          <Link
-            to="/cart"
+          </button>
+          <button
+            type="button"
+            onClick={handleNavigate('/cart')}
             className="flex items-center px-6 py-3 text-base text-gray-700 hover:bg-gray-100 relative"
-            onClick={onClose}
           >
             <ShoppingBag className="mr-3 h-5 w-5" />
             Cart
@@ -106,11 +111,11 @@ const UserMenu: React.FC<UserMenuProps> = ({ onClose, hideUserInfo }) => {
                 {cartItems.length}
               </span>
             )}
-          </Link>
-          <Link
-            to="/wishlist"
+          </button>
+          <button
+            type="button"
+            onClick={handleNavigate('/wishlist')}
             className="flex items-center px-6 py-3 text-base text-gray-700 hover:bg-gray-100 relative"
-            onClick={onClose}
           >
             <Heart className="mr-3 h-5 w-5" />
             Wishlist
@@ -119,23 +124,23 @@ const UserMenu: React.FC<UserMenuProps> = ({ onClose, hideUserInfo }) => {
                 {wishlistItems.length}
               </span>
             )}
-          </Link>
-          <Link
-            to="/account/addresses"
+          </button>
+          <button
+            type="button"
+            onClick={handleNavigate('/account/addresses')}
             className="flex items-center px-6 py-3 text-base text-gray-700 hover:bg-gray-100"
-            onClick={onClose}
           >
             <MapPin className="mr-3 h-5 w-5" />
             Addresses
-          </Link>
-          <Link
-            to="/account/payments"
+          </button>
+          <button
+            type="button"
+            onClick={handleNavigate('/account/payments')}
             className="flex items-center px-6 py-3 text-base text-gray-700 hover:bg-gray-100"
-            onClick={onClose}
           >
             <CreditCard className="mr-3 h-5 w-5" />
             Payment Methods
-          </Link>
+          </button>
         </div>
         <div className="py-2 border-t">
           <button

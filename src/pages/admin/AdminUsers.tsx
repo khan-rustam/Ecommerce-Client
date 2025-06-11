@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Loader2, Trash2 } from "lucide-react";
-import { useBrandColors } from "../../contexts/BrandColorContext";
 import { useNavigate } from "react-router-dom";
 
 const API_URL = "/api/auth/admin/users";
@@ -14,7 +13,6 @@ function getCookie(name: string) {
 const getToken = () => getCookie("token");
 
 const AdminUsers = () => {
-  const { colors } = useBrandColors();
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -105,17 +103,17 @@ const AdminUsers = () => {
         <button
           onClick={() => navigate("/admin")}
           className="hover:underline font-medium bg-transparent"
-          style={{ color: colors.primary }}
+          style={{ color: 'var(--brand-primary)' }}
         >
           Dashboard
         </button>
         <span className="mx-1 text-gray-400">/</span>
-        <span className="font-semibold" style={{ color: colors.text }}>
+        <span className="font-semibold" style={{ color: 'var(--brand-text)' }}>
           Users
         </span>
       </nav>
       <div className="w-full max-w-6xl bg-white rounded-3xl shadow-2xl p-2 md:p-10 animate-fade-in mt-4">
-        <h1 className="text-3xl font-extrabold mb-8 tracking-tight" style={{ color: colors.primary, letterSpacing: '-0.02em' }}>
+        <h1 className="text-3xl font-extrabold mb-8 tracking-tight" style={{ color: 'var(--brand-primary)', letterSpacing: '-0.02em' }}>
           Manage Users
         </h1>
         <div className="overflow-x-auto rounded-2xl">
@@ -123,7 +121,7 @@ const AdminUsers = () => {
             <div className="flex justify-center items-center py-16">
               <Loader2
                 className="animate-spin h-10 w-10"
-                style={{ color: colors.primary }}
+                style={{ color: 'var(--brand-primary)' }}
               />
             </div>
           ) : error ? (
@@ -135,7 +133,7 @@ const AdminUsers = () => {
           ) : (
             <table className="min-w-full text-xs md:text-base rounded-2xl overflow-hidden shadow-lg bg-[var(--brand-bg,#f4f7fa)]">
               <thead>
-                <tr style={{ background: colors.accent, color: colors.text }}>
+                <tr style={{ background: 'var(--brand-accent)', color: 'var(--brand-text)' }}>
                   <th className="py-2 md:py-5 px-2 md:px-6 text-left font-bold">#</th>
                   <th className="py-2 md:py-5 px-2 md:px-6 text-left font-bold">Name</th>
                   <th className="py-2 md:py-5 px-2 md:px-6 text-left font-bold">Email</th>
@@ -147,7 +145,7 @@ const AdminUsers = () => {
               </thead>
               <tbody>
                 {users.length === 0 ? (
-                  <tr style={{ background: colors.accent }}>
+                  <tr style={{ background: 'var(--brand-accent)' }}>
                     <td
                       colSpan={7}
                       className="py-10 text-center text-lg text-gray-400"
@@ -162,23 +160,23 @@ const AdminUsers = () => {
                       className="transition-all duration-200 hover:bg-[var(--brand-primary-light,#f0f6ff)] group border-b last:border-b-0"
                       style={{
                         background:
-                          idx % 2 === 0 ? colors.background : colors.accent,
+                          idx % 2 === 0 ? 'var(--brand-background)' : 'var(--brand-accent)',
                       }}
                     >
                       <td className="py-2 md:py-5 px-2 md:px-6 break-words font-bold text-lg text-gray-400 group-hover:text-[var(--brand-primary,#2563eb)]">{idx + 1}</td>
-                      <td className="py-2 md:py-5 px-2 md:px-6 font-semibold text-lg flex items-center gap-3" style={{ color: colors.text }}>
+                      <td className="py-2 md:py-5 px-2 md:px-6 font-semibold text-lg flex items-center gap-3" style={{ color: 'var(--brand-text)' }}>
                         <div className="w-11 h-11 rounded-full bg-gradient-to-br from-[var(--brand-primary,#2563eb)] to-[var(--brand-primary-light,#f0f6ff)] flex items-center justify-center text-white font-bold text-lg shadow-md">
                           {user.username?.[0]?.toUpperCase() || user.name?.[0]?.toUpperCase() || "U"}
                         </div>
                         <span className="leading-tight">{user.username || user.name}</span>
                       </td>
-                      <td className="py-2 md:py-5 px-2 md:px-6 text-base" style={{ color: colors.text }}>
+                      <td className="py-2 md:py-5 px-2 md:px-6 text-base" style={{ color: 'var(--brand-text)' }}>
                         {user.email}
                       </td>
-                      <td className="py-2 md:py-5 px-2 md:px-6 text-base" style={{ color: colors.text }}>
+                      <td className="py-2 md:py-5 px-2 md:px-6 text-base" style={{ color: 'var(--brand-text)' }}>
                         {user.phoneNumber || user.phone || <span className="text-gray-300">-</span>}
                       </td>
-                      <td className="py-2 md:py-5 px-2 md:px-6 text-base" style={{ color: colors.text }}>
+                      <td className="py-2 md:py-5 px-2 md:px-6 text-base" style={{ color: 'var(--brand-text)' }}>
                         {user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : <span className="text-gray-300">-</span>}
                       </td>
                       <td className="py-2 md:py-5 px-2 md:px-6">
@@ -204,7 +202,7 @@ const AdminUsers = () => {
                           />
                           <div
                             className={`w-14 h-7 rounded-full transition-all duration-200 relative ${user.isAdmin ? 'bg-[var(--brand-primary,#2563eb)]' : 'bg-gray-300'} peer-focus:ring-2 peer-focus:ring-[var(--brand-primary,#2563eb)] shadow-inner`}
-                            style={{ border: `1.5px solid ${colors.secondary}` }}
+                            style={{ border: `1.5px solid var(--brand-secondary)` }}
                           >
                             <div
                               className={`absolute left-1 top-1 w-5 h-5 rounded-full shadow transition-all duration-200 ${user.isAdmin ? 'bg-white translate-x-7' : 'bg-white'} border border-gray-300`}
@@ -212,7 +210,7 @@ const AdminUsers = () => {
                           </div>
                           <span
                             className="ml-3 text-xs font-semibold group-hover:text-[var(--brand-primary,#2563eb)]"
-                            style={{ color: colors.text }}
+                            style={{ color: 'var(--brand-text)' }}
                           >
                             {user.isAdmin ? "Set as User" : "Set as Admin"}
                           </span>

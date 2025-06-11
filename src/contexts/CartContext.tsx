@@ -12,8 +12,8 @@ interface CartItem {
 interface CartContextType {
   cartItems: CartItem[];
   addToCart: (product: Product, quantity?: number) => void;
-  removeFromCart: (productId: number) => void;
-  updateQuantity: (productId: number, quantity: number) => void;
+  removeFromCart: (productId: string | number) => void;
+  updateQuantity: (productId: string | number, quantity: number) => void;
   clearCart: () => void;
   getCartTotal: () => number;
 }
@@ -75,9 +75,9 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   }, [user]);
 
-  const removeFromCart = (productId: number) => {
+  const removeFromCart = (productId: string | number) => {
     setCartItems(prevItems => {
-      const updatedCart = prevItems.filter(item => item.product.id !== productId);
+      const updatedCart = prevItems.filter(item => (item.product.id !== productId && item.product._id !== productId));
       if (user && user._id) {
         axios.post('/api/cart', { userId: user._id, items: updatedCart });
       } else {
@@ -87,14 +87,14 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     });
   };
 
-  const updateQuantity = (productId: number, quantity: number) => {
+  const updateQuantity = (productId: string | number, quantity: number) => {
     if (quantity <= 0) {
       removeFromCart(productId);
       return;
     }
     setCartItems(prevItems => {
       const updatedCart = prevItems.map(item =>
-        item.product.id === productId
+        (item.product.id === productId || item.product._id === productId)
           ? { ...item, quantity }
           : item
       );

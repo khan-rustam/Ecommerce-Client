@@ -3,13 +3,11 @@ import { Link } from 'react-router-dom';
 import { Mail, ArrowRight } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
-import { useBrandColors } from '../../contexts/BrandColorContext';
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const { resetPassword } = useAuth();
-  const { colors } = useBrandColors();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,11 +24,11 @@ const ForgotPasswordPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" style={{ background: colors.background }}>
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8" style={{ background: 'var(--brand-bg)' }}>
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-xl">
         <div className="text-center">
-          <h2 className="text-3xl font-bold" style={{ color: colors.primary }}>Forgot your password?</h2>
-          <p className="mt-2 text-sm" style={{ color: colors.text }}>
+          <h2 className="text-3xl font-bold" style={{ color: 'var(--brand-primary)' }}>Forgot your password?</h2>
+          <p className="mt-2 text-sm" style={{ color: 'var(--brand-text)' }}>
             Enter your email address and we'll send you instructions to reset your password.
           </p>
         </div>
@@ -60,7 +58,7 @@ const ForgotPasswordPage = () => {
               type="submit"
               disabled={loading}
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md transition-colors"
-              style={{ background: colors.primary, color: '#fff' }}
+              style={{ background: 'var(--brand-primary)', color: '#fff' }}
             >
               {loading ? (
                 'Sending instructions...'
@@ -75,9 +73,9 @@ const ForgotPasswordPage = () => {
         </form>
 
         <div className="text-center">
-          <p className="text-sm" style={{ color: colors.text }}>
+          <p className="text-sm" style={{ color: 'var(--brand-text)' }}>
             Remember your password?{' '}
-            <Link to="/auth/login" className="font-medium transition-colors" style={{ color: colors.primary }}>
+            <Link to="/auth/login" className="font-medium transition-colors" style={{ color: 'var(--brand-primary)' }}>
               Sign in
             </Link>
           </p>

@@ -1,7 +1,6 @@
 import React, { ReactNode, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
-import { useBrandColors } from "../../contexts/BrandColorContext";
 
 interface AccountLayoutProps {
   children: ReactNode;
@@ -13,7 +12,6 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({
   requireAuth = true 
 }) => {
   const user = useSelector((state: any) => state.user.user);
-  const { colors } = useBrandColors();
   const navigate = useNavigate();
 
   // Redirect to login if user is not authenticated
@@ -34,7 +32,7 @@ const AccountLayout: React.FC<AccountLayoutProps> = ({
   return (
     <div 
       className="min-h-screen pt-20 pb-12 px-4 md:px-8"
-      style={{ background: colors.background || "#f5f5f5" }}
+      style={{ background: 'var(--brand-bg)' }}
     >
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col md:flex-row gap-6">
