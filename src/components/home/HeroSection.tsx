@@ -4,6 +4,7 @@ import { get } from "../../utils/authFetch";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { useUserMenu } from '../../contexts/UserMenuContext';
 
 interface HeroProps {
   title: string;
@@ -40,6 +41,7 @@ const getSliderSettings = (bannerCount: number) => ({
 });
 
 const HeroSection: React.FC<HeroProps> = ({ title, subtitle, buttonText, buttonLink, backgroundImage, titleFontSize, titleFontWeight, subtitleFontSize, subtitleFontWeight }) => {
+  const { userMenuOpen } = useUserMenu();
   const [activeBanners, setActiveBanners] = useState<Banner[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
@@ -151,14 +153,14 @@ const HeroSection: React.FC<HeroProps> = ({ title, subtitle, buttonText, buttonL
         <>
           <button
             onClick={() => sliderRef.current?.slickPrev()}
-            className="absolute left-6 top-1/2 transform -translate-y-1/2 z-40 bg-primary hover:bg-accent text-white p-3 rounded-full shadow-lg transition-all duration-200 border-2 border-white/40"
+            className={`absolute left-6 top-1/2 transform -translate-y-1/2 z-40 bg-primary hover:bg-accent text-white p-3 rounded-full shadow-lg transition-all duration-200 border-2 border-white/40${userMenuOpen ? ' pointer-events-none' : ''}`}
             aria-label="Previous banner"
           >
             <ChevronLeft className="h-7 w-7" />
           </button>
           <button
             onClick={() => sliderRef.current?.slickNext()}
-            className="absolute right-6 top-1/2 transform -translate-y-1/2 z-40 bg-primary hover:bg-accent text-white p-3 rounded-full shadow-lg transition-all duration-200 border-2 border-white/40"
+            className={`absolute right-6 top-1/2 transform -translate-y-1/2 z-40 bg-primary hover:bg-accent text-white p-3 rounded-full shadow-lg transition-all duration-200 border-2 border-white/40${userMenuOpen ? ' pointer-events-none' : ''}`}
             aria-label="Next banner"
           >
             <ChevronRight className="h-7 w-7" />

@@ -26,17 +26,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ onClose, hideUserInfo }) => {
   const { cartItems } = useCart();
   const { wishlistItems } = useWishlist();
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        onClose();
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [onClose]);
-
   const handleSignOut = () => {
     dispatch(clearUser());
     onClose();
@@ -44,11 +33,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ onClose, hideUserInfo }) => {
     setTimeout(() => {
       navigate("/", { replace: true });
     }, 100);
-  };
-
-  const handleNavigate = (path: string) => () => {
-    onClose();
-    setTimeout(() => navigate(path), 50);
   };
 
   if (!user) {
@@ -59,6 +43,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ onClose, hideUserInfo }) => {
     <div
       ref={menuRef}
       className="h-full w-full p-0 overflow-y-auto max-h-[90vh] bg-white"
+      onClick={e => e.stopPropagation()}
     >
       <div>
         {!hideUserInfo && (
@@ -83,26 +68,26 @@ const UserMenu: React.FC<UserMenuProps> = ({ onClose, hideUserInfo }) => {
           </div>
         )}
         <div className="py-2">
-          <button
-            type="button"
-            onClick={handleNavigate('/account/profile')}
+          <Link
+            to="/account/profile"
             className="flex items-center px-6 py-3 text-base text-gray-700 hover:bg-gray-100"
+            onClick={onClose}
           >
             <User className="mr-3 h-5 w-5" />
             Profile Settings
-          </button>
-          <button
-            type="button"
-            onClick={handleNavigate('/account/orders')}
+          </Link>
+          <Link
+            to="/account/orders"
             className="flex items-center px-6 py-3 text-base text-gray-700 hover:bg-gray-100"
+            onClick={onClose}
           >
             <ShoppingBag className="mr-3 h-5 w-5" />
             My Orders
-          </button>
-          <button
-            type="button"
-            onClick={handleNavigate('/cart')}
+          </Link>
+          <Link
+            to="/cart"
             className="flex items-center px-6 py-3 text-base text-gray-700 hover:bg-gray-100 relative"
+            onClick={onClose}
           >
             <ShoppingBag className="mr-3 h-5 w-5" />
             Cart
@@ -111,11 +96,11 @@ const UserMenu: React.FC<UserMenuProps> = ({ onClose, hideUserInfo }) => {
                 {cartItems.length}
               </span>
             )}
-          </button>
-          <button
-            type="button"
-            onClick={handleNavigate('/wishlist')}
+          </Link>
+          <Link
+            to="/wishlist"
             className="flex items-center px-6 py-3 text-base text-gray-700 hover:bg-gray-100 relative"
+            onClick={onClose}
           >
             <Heart className="mr-3 h-5 w-5" />
             Wishlist
@@ -124,23 +109,23 @@ const UserMenu: React.FC<UserMenuProps> = ({ onClose, hideUserInfo }) => {
                 {wishlistItems.length}
               </span>
             )}
-          </button>
-          <button
-            type="button"
-            onClick={handleNavigate('/account/addresses')}
+          </Link>
+          <Link
+            to="/account/addresses"
             className="flex items-center px-6 py-3 text-base text-gray-700 hover:bg-gray-100"
+            onClick={onClose}
           >
             <MapPin className="mr-3 h-5 w-5" />
             Addresses
-          </button>
-          <button
-            type="button"
-            onClick={handleNavigate('/account/payments')}
+          </Link>
+          <Link
+            to="/account/payments"
             className="flex items-center px-6 py-3 text-base text-gray-700 hover:bg-gray-100"
+            onClick={onClose}
           >
             <CreditCard className="mr-3 h-5 w-5" />
             Payment Methods
-          </button>
+          </Link>
         </div>
         <div className="py-2 border-t">
           <button

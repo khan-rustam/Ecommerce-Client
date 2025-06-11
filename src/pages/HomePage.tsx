@@ -150,11 +150,6 @@ const HomePage = () => {
     }
   };
 
-  const handleNavigate = (path: string) => () => {
-    setCallbackModalOpen(false);
-    setTimeout(() => navigate(path), 50);
-  };
-
   return (
     <div style={{ background: "#E6E5E8", color: "#2E5767" }}>
       <HeroSection

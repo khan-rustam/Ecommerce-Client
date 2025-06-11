@@ -40,10 +40,11 @@ import { useCart } from "../../contexts/CartContext";
 import { useWishlist } from "../../contexts/WishlistContext";
 import { createPortal } from "react-dom";
 import ProductService from "../../utils/ProductService";
+import { useUserMenu } from '../../contexts/UserMenuContext';
 
 const Header = () => {
   const [showSearchBar, setShowSearchBar] = useState(false);
-  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const { userMenuOpen, setUserMenuOpen } = useUserMenu();
   const [showAdminSidebar, setShowAdminSidebar] = useState(false);
   const user = useSelector((state: { user: { user: any } }) => state.user.user);
   const navigate = useNavigate();
@@ -68,7 +69,7 @@ const Header = () => {
     if (!user) {
       navigate("/auth/login");
     } else {
-      setShowUserDropdown((prev) => !prev);
+      setUserMenuOpen(!userMenuOpen);
     }
   };
 
@@ -111,18 +112,18 @@ const Header = () => {
         userMenuRef.current &&
         !userMenuRef.current.contains(event.target as Node)
       ) {
-        setShowUserDropdown(false);
+        setUserMenuOpen(false);
       }
     }
 
-    if (showUserDropdown) {
+    if (userMenuOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [showUserDropdown]);
+  }, [userMenuOpen]);
 
   React.useEffect(() => {
     function onFullscreenChange() {
@@ -251,9 +252,9 @@ const Header = () => {
                 className="w-9 h-9 rounded-full object-cover border-2 border-accent/30 cursor-pointer shadow-md hover:scale-105 transition"
                 onClick={handleUserDropdown}
               />
-              {showUserDropdown && (
+              {userMenuOpen && (
                 <div className="absolute right-0 top-full mt-2 w-64 bg-background rounded-xl shadow-2xl z-50 overflow-hidden border border-accent/20 animate-fade-in-up">
-                  <UserMenu onClose={() => setShowUserDropdown(false)} />
+                  <UserMenu onClose={() => setUserMenuOpen(false)} />
                 </div>
               )}
             </div>
@@ -475,9 +476,9 @@ const Header = () => {
                   className="w-10 h-10 rounded-full object-cover border-2 border-accent/30 cursor-pointer shadow-md hover:scale-105 transition"
                   onClick={handleUserDropdown}
                 />
-                {showUserDropdown && (
-                  <div className="absolute right-0 top-full mt-2 w-80 bg-background rounded-xl shadow-2xl z-50 overflow-hidden border border-accent/20 animate-fade-in-up">
-                    <UserMenu onClose={() => setShowUserDropdown(false)} />
+                {userMenuOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-80 bg-background rounded-xl shadow-2xl z-[9999] overflow-hidden border border-accent/20 animate-fade-in-up">
+                    <UserMenu onClose={() => setUserMenuOpen(false)} />
                   </div>
                 )}
               </div>
